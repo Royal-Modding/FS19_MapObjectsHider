@@ -1,0 +1,65 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "command": "fsmt",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "args": [
+        "-b",
+        "-c",
+        "-s"
+      ],
+      "options": {
+        "cwd": "${workspaceRoot}/"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Sync",
+      "command": "fsmt",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "args": [
+        "-sync",
+        "-c",
+        "-s"
+      ],
+      "options": {
+        "cwd": "${workspaceRoot}/"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "promptOnClose": true
+    },
+    {
+      "label": "Release",
+      "command": "fsmt",
+      "args": [
+        "-r"
+      ],
+      "options": {
+        "cwd": "${workspaceRoot}/"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Translate",
+      "command": "fsmt",
+      "args": [
+        "-t"
+      ],
+      "options": {
+        "cwd": "${workspaceRoot}/"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
