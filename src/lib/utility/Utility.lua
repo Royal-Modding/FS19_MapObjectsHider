@@ -2,7 +2,7 @@
 -- Royal Utility
 --
 -- @author Royal Modding
--- @version 1.3.0.0
+-- @version 1.4.0.0
 -- @date 09/11/2020
 
 --- Utility class
@@ -309,16 +309,17 @@ function Utility.renderTable(posX, posY, textSize, inputTable, maxDepth, hideFun
             return i
         end
         for k, v in pairs(t) do
-            if not hideFunc or type(v) ~= "function" then
+            local vType = type(v)
+            if not hideFunc or vType ~= "function" then
                 local offset = i * textSize * 1.05
                 setTextAlignment(RenderText.ALIGN_RIGHT)
                 renderText(x, posY - offset, textSize, tostring(k) .. " :")
                 setTextAlignment(RenderText.ALIGN_LEFT)
-                if type(v) ~= "table" then
+                if vType ~= "table" then
                     renderText(x, posY - offset, textSize, " " .. tostring(v))
                 end
                 i = i + 1
-                if type(v) == "table" then
+                if vType == "table" then
                     i = renderTableRecursively(x + textSize * 1.8, v, depth + 1, i)
                 end
             end
@@ -331,16 +332,17 @@ function Utility.renderTable(posX, posY, textSize, inputTable, maxDepth, hideFun
     setTextBold(false)
     textSize = getCorrectTextSize(textSize)
     for k, v in pairs(inputTable) do
-        if not hideFunc or type(v) ~= "function" then
+        local vType = type(v)
+        if not hideFunc or vType ~= "function" then
             local offset = i * textSize * 1.05
             setTextAlignment(RenderText.ALIGN_RIGHT)
             renderText(posX, posY - offset, textSize, tostring(k) .. " :")
             setTextAlignment(RenderText.ALIGN_LEFT)
-            if type(v) ~= "table" then
+            if vType ~= "table" then
                 renderText(posX, posY - offset, textSize, " " .. tostring(v))
             end
             i = i + 1
-            if type(v) == "table" then
+            if vType == "table" then
                 i = renderTableRecursively(posX + textSize * 1.8, v, 1, i)
             end
         end
@@ -583,10 +585,8 @@ function Utility.indexToNode(nodeIndex, rootId)
     if nodeIndex == nil or rootId == nil or not entityExists(rootId) then
         return nil
     end
-
     local objectId = rootId
     local indexes = Utility.split(nodeIndex, "|")
-
     for _, index in pairs(indexes) do
         index = tonumber(index)
         if type(index) == "number" then
@@ -599,7 +599,6 @@ function Utility.indexToNode(nodeIndex, rootId)
             return nil
         end
     end
-
     return objectId
 end
 
@@ -616,7 +615,6 @@ function Utility.queryNodeHierarchy(inputNode, func)
             queryNodeHierarchyRecursively(getChildAt(node, i), depth + 1)
         end
     end
-
     local depth = 1
     func(inputNode, getName(inputNode), depth)
     for i = 0, getNumOfChildren(inputNode) - 1 do

@@ -16,20 +16,20 @@ function HideDecollideNodeEvent:emptyNew()
     return o
 end
 
-function HideDecollideNodeEvent:new(objectId, hide)
+function HideDecollideNodeEvent:new(objectIndex, hide)
     local o = HideDecollideNodeEvent:emptyNew()
-    o.objectId = objectId
-    o.mode = hide
+    o.objectIndex = objectIndex
+    o.hide = hide
     return o
 end
 
 function HideDecollideNodeEvent:writeStream(streamId, connection)
-    streamWriteInt32(streamId, self.objectId)
+    streamWriteString(streamId, self.objectIndex)
     streamWriteBool(streamId, self.hide)
 end
 
 function HideDecollideNodeEvent:readStream(streamId, connection)
-    self.objectId = streamReadInt32(streamId)
+    self.objectIndex = streamReadString(streamId)
     self.hide = streamReadBool(streamId)
     self:run(connection)
 end
@@ -37,15 +37,15 @@ end
 function HideDecollideNodeEvent:run(connection)
     if g_server == nil then
         if self.hide then
-            MapObjectsHider:hideNode(self.objectId)
+            MapObjectsHider:hideNode(Utility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
         else
-            MapObjectsHider:decollideNode(self.objectId)
+            MapObjectsHider:decollideNode(Utility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
         end
     end
 end
 
-function HideDecollideNodeEvent.sendToClients(objectId, hide)
+function HideDecollideNodeEvent.sendToClients(objectIndex, hide)
     if g_server ~= nil then
-        g_server:broadcastEvent(HideDecollideNodeEvent:new(objectId, hide))
+        g_server:broadcastEvent(HideDecollideNodeEvent:new(objectIndex, hide))
     end
 end

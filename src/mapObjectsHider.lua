@@ -26,6 +26,12 @@ function MapObjectsHider:loadMap()
         Player.hideObjectDialogCallback = PlayerExtension.hideObjectDialogCallback
     end
     self.mapNode = g_currentMission.maps[1]
+
+    if g_server ~= nil then
+        local sync = MapObjectsHiderSync:new(g_server ~= nil, g_client ~= nil)
+        sync:register(false)
+    end
+    
     self:loadSavegame()
 end
 
@@ -163,10 +169,10 @@ function MapObjectsHider:hideObject(objectId)
 
         if MapObjectsHider:checkHideObject(object) then
             self:hideNode(object.id)
-            HideDecollideNodeEvent.sendToClients(object.id, true)
+            HideDecollideNodeEvent.sendToClients(object.index, true)
             for _, collision in pairs(object.collisions) do
                 self:decollideNode(collision.id)
-                HideDecollideNodeEvent.sendToClients(collision.id, false)
+                HideDecollideNodeEvent.sendToClients(collision.index, false)
             end
             table.insert(self.hiddenObjects, object)
         end

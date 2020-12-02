@@ -16,29 +16,29 @@ function ObjectHideRequestEvent:emptyNew()
     return o
 end
 
-function ObjectHideRequestEvent:new(objectId)
+function ObjectHideRequestEvent:new(objectIndex)
     local o = ObjectHideRequestEvent:emptyNew()
-    o.objectId = objectId
+    o.objectIndex = objectIndex
     return o
 end
 
 function ObjectHideRequestEvent:writeStream(streamId, connection)
-    streamWriteInt32(streamId, self.objectId)
+    streamWriteString(streamId, self.objectIndex)
 end
 
 function ObjectHideRequestEvent:readStream(streamId, connection)
-    self.objectId = streamReadInt32(streamId)
+    self.objectIndex = streamReadString(streamId)
     self:run(connection)
 end
 
 function ObjectHideRequestEvent:run(connection)
     if g_server ~= nil then
-        MapObjectsHider:hideObject(self.objectId)
+        MapObjectsHider:hideObject(Utility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
     end
 end
 
 function ObjectHideRequestEvent.sendToServer(objectId)
     if g_server == nil then
-        g_client:getServerConnection():sendEvent(ObjectHideRequestEvent:new(objectId))
+        g_client:getServerConnection():sendEvent(ObjectHideRequestEvent:new(Utility.nodeToIndex(objectId, MapObjectsHider.mapNode)))
     end
 end
