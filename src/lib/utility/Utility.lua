@@ -2,7 +2,7 @@
 -- Royal Utility
 --
 -- @author Royal Modding
--- @version 1.4.0.0
+-- @version 1.4.0.2
 -- @date 09/11/2020
 
 --- Utility class
@@ -349,8 +349,10 @@ function Utility.renderTable(posX, posY, textSize, inputTable, maxDepth, hideFun
     end
 end
 
+--- Get the class id and name of an onject
 ---@param objectId integer
----@return integer, string
+---@return integer classId class id
+---@return string className class name
 function Utility.getObjectClass(objectId)
     if objectId == nil then
         return nil, nil
@@ -632,12 +634,25 @@ function Utility.getNodeHierarchyHash(node, parent)
     end
     local hash = ""
     local nodeCount = 0
+
+    local floatsToString = function(...)
+        local ret = {}
+        for i, v in ipairs({...}) do
+            local tV = string.format("%.1f", v)
+            if tV == "-0.0" then
+                tV = "0.0"
+            end
+            ret[i] = tV
+        end
+        return table.concat(ret, "|")
+    end
+
     Utility.queryNodeHierarchy(
         node,
         function(n, name)
-            local pos = string.format("%.1f|%.1f|%.1f", getWorldTranslation(n))
-            local rot = string.format("%.1f|%.1f|%.1f", getWorldRotation(n))
-            local sca = string.format("%.1f|%.1f|%.1f", getScale(n))
+            local pos = floatsToString(getWorldTranslation(n))
+            local rot = floatsToString(getWorldRotation(n))
+            local sca = floatsToString(getScale(n))
             local index = Utility.nodeToIndex(node, parent)
             local rbt = getRigidBodyType(n)
             local vis = getVisibility(n)
@@ -645,8 +660,8 @@ function Utility.getNodeHierarchyHash(node, parent)
             nodeCount = nodeCount + 1
         end
     )
-    --return getMD5(string.format("%s%s_dMs5AsHZWy", hash, nodeCount))
-    return string.format("%s[(%s)]_dMs5AsHZWy", hash, nodeCount)
+    return getMD5(string.format("%s%s_dMs5AsHZWy", hash, nodeCount))
+    --return string.format("%s[(%s)]_dMs5AsHZWy", hash, nodeCount)
 end
 
 --- Queries node parents (return false to break the loop)

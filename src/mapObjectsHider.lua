@@ -5,13 +5,14 @@
 -- @version ${version}
 -- @date 29/11/2020
 
-MapObjectsHider = {}
-MapObjectsHider.debug = r_debug_r
-MapObjectsHider.hiddenObjects = {}
-
+InitRoyalMod(Utils.getFilename("lib/rmod/", g_currentModDirectory))
 InitRoyalUtility(Utils.getFilename("lib/utility/", g_currentModDirectory))
 
-function MapObjectsHider:loadMap()
+MapObjectsHider = RoyalMod.new(r_debug_r, true)
+MapObjectsHider.hiddenObjects = {}
+
+function MapObjectsHider:initialize()
+    Utility.prependedFunction(BaseMission, "findDynamicObjects", self.findDynamicObjects)
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
     Utility.overwrittenFunction(Player, "update", PlayerExtension.update)
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
@@ -25,19 +26,51 @@ function MapObjectsHider:loadMap()
     if Player.hideObjectDialogCallback == nil then
         Player.hideObjectDialogCallback = PlayerExtension.hideObjectDialogCallback
     end
-    self.mapNode = g_currentMission.maps[1]
-
-    if g_server ~= nil then
-        local sync = MapObjectsHiderSync:new(g_server ~= nil, g_client ~= nil)
-        sync:register(false)
+    if Player.sellObjectDialogCallback == nil then
+        Player.sellObjectDialogCallback = PlayerExtension.sellObjectDialogCallback
     end
-    
-    self:loadSavegame()
 end
 
-function MapObjectsHider:loadSavegame()
+function MapObjectsHider:onMissionInitialize(baseDirectory, missionCollaborators)
+end
+
+function MapObjectsHider:onSetMissionInfo(missionInfo, missionDynamicInfo)
+end
+
+function MapObjectsHider:onLoad()
+    --DebugUtil.printTableRecursively(SellPlaceableEvent)
+end
+
+function MapObjectsHider:onPreLoadMap(mapFile)
+end
+
+function MapObjectsHider:onCreateStartPoint(startPointNode)
+end
+
+function MapObjectsHider:findDynamicObjects(node)
+    if self.missionDynamicInfo.isMultiplayer then
+        for i = 1, getNumOfChildren(node) do
+            local c = getChildAt(node, i - 1)
+            if "Dynamic" == getRigidBodyType(c) and (not getHasClassId(c, ClassIds.SHAPE) or getSplitType(c) == 0) then
+                if Utils.getNoNil(getUserAttribute(c, "mpRemoveRigidBody"), true) then
+                    -- TODO: fix this cause it's not working
+                    setUserAttribute(c, "mpRemoveRigidBody", "boolean", false)
+                end
+            end
+        end
+    end
+end
+
+function MapObjectsHider:onLoadMap(mapNode, mapFile)
+    self.mapNode = mapNode
+end
+
+function MapObjectsHider:onPostLoadMap(mapNode, mapFile)
+end
+
+function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
     if g_server ~= nil then
-        local file = g_currentMission.missionInfo.savegameDirectory .. "/mapObjectsHider.xml"
+        local file = string.format("%smapObjectsHider.xml", savegameDirectory)
         if fileExists(file) then
             local xmlFile = loadXMLFile("mapObjectsHider_xml_temp", file)
             local index = 0
@@ -50,6 +83,7 @@ function MapObjectsHider:loadSavegame()
                     object.hash = getXMLString(xmlFile, key .. "#hash") or ""
                     object.date = getXMLString(xmlFile, key .. "#date") or ""
                     object.time = getXMLString(xmlFile, key .. "#time") or ""
+                    object.player = getXMLString(xmlFile, key .. "#player") or ""
                     object.id = Utility.indexToNode(object.index, self.mapNode)
                     if object.id ~= nil then
                         local newHash = Utility.getNodeHierarchyHash(object.id, self.mapNode)
@@ -95,14 +129,86 @@ function MapObjectsHider:loadSavegame()
     end
 end
 
-function MapObjectsHider:printObjectLoadingError(name)
-    g_logManager:warning("Can't find %s, something may have changed in the map hierarchy, the object will be restored.", name)
+function MapObjectsHider:onPreLoadVehicles(xmlFile, resetVehicles)
 end
 
-function MapObjectsHider:saveSavegame()
+function MapObjectsHider:onPreLoadItems(xmlFile)
+end
+
+function MapObjectsHider:onPreLoadOnCreateLoadedObjects(xmlFile)
+end
+
+function MapObjectsHider:onLoadFinished()
+end
+
+function MapObjectsHider:onStartMission()
+end
+
+function MapObjectsHider:onMissionStarted()
+end
+
+function MapObjectsHider:onWriteStream(streamId)
+    local objectsCount = #self.hiddenObjects
+    local collisionsCount = 0
+    local collisions = {}
+    streamWriteInt32(streamId, objectsCount)
+    for i = 1, objectsCount, 1 do
+        local obj = self.hiddenObjects[i]
+        collisionsCount = collisionsCount + #obj.collisions
+        for _, col in pairs(obj.collisions) do
+            table.insert(collisions, col.index)
+        end
+        streamWriteString(streamId, obj.index)
+    end
+    streamWriteInt32(streamId, collisionsCount)
+    for i = 1, collisionsCount, 1 do
+        streamWriteString(streamId, collisions[i])
+    end
+end
+
+function MapObjectsHider:onReadStream(streamId)
+    local objectsCount = streamReadInt32(streamId)
+    for i = 1, objectsCount, 1 do
+        local objIndex = streamReadString(streamId)
+        self:hideNode(Utility.indexToNode(objIndex, self.mapNode))
+    end
+    local collisionsCount = streamReadInt32(streamId)
+    for i = 1, collisionsCount, 1 do
+        local colIndex = streamReadString(streamId)
+        self:decollideNode(Utility.indexToNode(colIndex, self.mapNode))
+    end
+end
+
+function MapObjectsHider:onUpdate(dt)
+    --Utility.renderNodeHierarchy(0.01, 0.98, 0.01, I3DUtil.indexToObject(self.mapNode, "10"))
+    --Utility.renderNodeHierarchy(0.01, 0.98, 0.01, self.mapNode, 2)
+end
+
+function MapObjectsHider:onUpdateTick(dt)
+end
+
+function MapObjectsHider:onWriteUpdateStream(streamId, connection, dirtyMask)
+end
+
+function MapObjectsHider:onReadUpdateStream(streamId, timestamp, connection)
+end
+
+function MapObjectsHider:onMouseEvent(posX, posY, isDown, isUp, button)
+end
+
+function MapObjectsHider:onKeyEvent(unicode, sym, modifier, isDown)
+end
+
+function MapObjectsHider:onDraw()
+end
+
+function MapObjectsHider:onPreSaveSavegame(savegameDirectory, savegameIndex)
+end
+
+function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
     if g_server ~= nil then
         self = MapObjectsHider
-        local file = g_currentMission.missionInfo.savegameDirectory .. "/mapObjectsHider.xml"
+        local file = string.format("%smapObjectsHider.xml", savegameDirectory)
         local xmlFile = createXMLFile("mapObjectsHider_xml_temp", file, "mapObjectsHider")
         local index = 0
         for _, object in pairs(self.hiddenObjects) do
@@ -112,6 +218,7 @@ function MapObjectsHider:saveSavegame()
             setXMLString(xmlFile, key .. "#hash", object.hash)
             setXMLString(xmlFile, key .. "#date", object.date)
             setXMLString(xmlFile, key .. "#time", object.time)
+            setXMLString(xmlFile, key .. "#player", object.player)
 
             local cIndex = 0
             for _, collision in pairs(object.collisions) do
@@ -129,43 +236,21 @@ function MapObjectsHider:saveSavegame()
     end
 end
 
-function MapObjectsHider:update(dt)
-    --Utility.renderNodeHierarchy(0.01, 0.98, 0.01, I3DUtil.indexToObject(self.mapNode, "10"))
-    --Utility.renderNodeHierarchy(0.01, 0.98, 0.01, self.mapNode, 2)
+function MapObjectsHider:onPreDeleteMap()
 end
 
-function MapObjectsHider:mouseEvent(posX, posY, isDown, isUp, button)
+function MapObjectsHider:onDeleteMap()
 end
 
-function MapObjectsHider:keyEvent(unicode, sym, modifier, isDown)
+function MapObjectsHider:printObjectLoadingError(name)
+    g_logManager:warning("Can't find %s, something may have changed in the map hierarchy, the object will be restored.", name)
 end
 
-function MapObjectsHider:draw()
-end
-
-function MapObjectsHider:delete()
-end
-
-function MapObjectsHider:deleteMap()
-end
-
-function MapObjectsHider:hideObject(objectId)
+function MapObjectsHider:hideObject(objectId, name, hiderPlayerName)
     if g_server ~= nil then
-        local objectName = ""
-        Utility.queryNodeParents(
-            objectId,
-            function(node, name)
-                -- do some extra checks to ensure that's the real object
-                if getVisibility(node) then
-                    objectId = node
-                    objectName = name
-                    return false
-                end
-                return true
-            end
-        )
+        local objectName = name or getName(objectId)
 
-        local object = MapObjectsHider:getHideObject(objectId, objectName)
+        local object = MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
 
         if MapObjectsHider:checkHideObject(object) then
             self:hideNode(object.id)
@@ -189,7 +274,7 @@ function MapObjectsHider:decollideNode(nodeId)
     setRigidBodyType(nodeId, "NoRigidBody")
 end
 
-function MapObjectsHider:getHideObject(objectId, objectName)
+function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
     local object = {}
     object.index = Utility.nodeToIndex(objectId, self.mapNode)
     object.id = objectId
@@ -197,6 +282,7 @@ function MapObjectsHider:getHideObject(objectId, objectName)
     object.name = objectName
     object.date = getDate("%d/%m/%Y")
     object.time = getDate("%H:%M:%S")
+    object.player = hiderPlayerName or g_currentMission.userManager:getUserByUserId(g_currentMission.player.userId):getNickname()
 
     object.collisions = {}
     Utility.queryNodeHierarchy(
@@ -246,6 +332,37 @@ function MapObjectsHider:checkHideObject(object)
     return true
 end
 
-Utility.appendedFunction(FSBaseMission, "saveSavegame", MapObjectsHider.saveSavegame)
+function MapObjectsHider:getRealHideObject(objectId)
+    local name = ""
+    local id = nil
+    Utility.queryNodeParents(
+        objectId,
+        function(node, nodeName)
+            -- do some extra checks to ensure that's the real object
+            if getVisibility(node) then
+                id = node
+                name = nodeName
+                return false
+            end
+            return true
+        end
+    )
+    return id, name
+end
 
-addModEventListener(MapObjectsHider)
+function MapObjectsHider:getObjectDebugInfo(objectId)
+    local debugInfo = {}
+    debugInfo.id = objectId
+    _, debugInfo.objectClass = Utility.getObjectClass(objectId)
+    debugInfo.object = g_currentMission:getNodeObject(objectId) or "nil"
+    debugInfo.rigidBodyType = getRigidBodyType(objectId)
+    debugInfo.index = Utility.nodeToIndex(objectId, self.mapNode)
+    debugInfo.name = getName(objectId)
+    debugInfo.material = getMaterial(objectId, 0)
+    debugInfo.materialName = getName(debugInfo.material)
+    debugInfo.geometry = getGeometry(objectId)
+    debugInfo.clipDistance = getClipDistance(objectId)
+    debugInfo.mask = getObjectMask(objectId)
+    debugInfo.isNonRenderable = getIsNonRenderable(objectId)
+    return debugInfo
+end

@@ -1229,6 +1229,7 @@
         "setCropsGrowthNextState",
         "g_courseplay",
         "InGameMenuContractsFrame",
-        "r_debug_r"
+        "r_debug_r",
+        "SellPlaceableEvent"
     ]
 }

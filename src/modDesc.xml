@@ -26,7 +26,7 @@
 	<iconFilename>icon.png</iconFilename>
 	<extraSourceFiles>
 		<sourceFile filename="lib/utility/Main.lua" />
-		<sourceFile filename="mapObjectsHiderSync.lua" />
+		<sourceFile filename="lib/rmod/Main.lua" />
 		<sourceFile filename="mapObjectsHider.lua" />
 		<sourceFile filename="playerExtension.lua" />
 		<sourceFile filename="events/objectHideRequest.lua" />
@@ -50,8 +50,14 @@
 		<text name="moh_HIDE">
 			<en>Hide object (%s)</en>
 		</text>
+		<text name="moh_SELL">
+			<en>Sell (%s)</en>
+		</text>
 		<text name="moh_dialog_text">
-			<en>Are you sure you want hide %s ?</en>
+			<en>Are you sure you want to hide %s ?</en>
+		</text>
+		<text name="moh_sell_dialog_text">
+			<en>Are you sure you want to sell %s ?</en>
 		</text>
 		<text name="moh_dialog_title">
 			<en>Map Objects Hider</en>

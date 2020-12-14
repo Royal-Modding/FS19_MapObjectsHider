@@ -26,46 +26,57 @@ end
 function PlayerExtension:update(superFunc, dt)
     superFunc(self, dt)
     if MapObjectsHider.debug and self.debugInfo ~= nil then
-        Utility.renderTable(0.1, 0.95, 0.009, self.debugInfo or "nil", 3, false)
+        Utility.renderTable(0.1, 0.95, 0.01, self.debugInfo, 3, false)
+    end
+    if MapObjectsHider.debug and self.hideObjectDebugInfo ~= nil then
+        Utility.renderTable(0.2, 0.95, 0.01, self.hideObjectDebugInfo, 3, false)
     end
 end
 
 function PlayerExtension:updateTick(superFunc, dt)
     superFunc(self, dt)
-    if self.isEntered then
+    if self.isEntered and g_dedicatedServerInfo == nil then
         local x, y, z = localToWorld(self.cameraNode, 0, 0, 1.0)
         local dx, dy, dz = localDirectionToWorld(self.cameraNode, 0, 0, -1)
-        self.raycastHittedObject = nil
+        self.raycastHideObject = nil
         self.debugInfo = nil
+        self.hideObjectDebugInfo = nil
         raycastAll(x, y, z, dx, dy, dz, "raycastCallback", 5, self)
     end
 end
 
-function PlayerExtension:raycastCallback(hitObjectId, _, _, _, _)
+function PlayerExtension:raycastCallback(hitObjectId)
     if hitObjectId ~= self.rootNode then
         if getHasClassId(hitObjectId, ClassIds.SHAPE) then
             if MapObjectsHider.debug and self.debugInfo == nil then
-                self.debugInfo = {}
-                self.debugInfo.id = hitObjectId
-                self.debugInfo.object = g_currentMission:getNodeObject(hitObjectId) or "nil"
-                self.debugInfo.rigidBodyType = getRigidBodyType(hitObjectId)
-                self.debugInfo.index = Utility.nodeToIndex(hitObjectId, MapObjectsHider.mapNode)
-                self.debugInfo.name = getName(hitObjectId)
-                self.debugInfo.material = getMaterial(hitObjectId, 0)
-                self.debugInfo.materialName = getName(self.debugInfo.material)
-                self.debugInfo.geometry = getGeometry(hitObjectId)
-                self.debugInfo.clipDistance = getClipDistance(hitObjectId)
-                self.debugInfo.mask = getObjectMask(hitObjectId)
+                -- debug first hitted object
+                self.debugInfo = MapObjectsHider:getObjectDebugInfo(hitObjectId)
             end
-            if g_currentMission:getNodeObject(hitObjectId) == nil and (getRigidBodyType(hitObjectId) == "Static" or getRigidBodyType(hitObjectId) == "Dynamic") and getSplitType(hitObjectId) == 0 then
-                local object = {}
-                object.id = hitObjectId
-                object.name = getName(hitObjectId)
-                if not getVisibility(hitObjectId) then
-                    object.name = getName(getParent(hitObjectId))
+            local rigidBodyType = getRigidBodyType(hitObjectId)
+            if (rigidBodyType == "Static" or rigidBodyType == "Dynamic") and getSplitType(hitObjectId) == 0 then
+                if g_currentMission:getNodeObject(hitObjectId) == nil then
+                    local object = {}
+                    object.id, object.name = MapObjectsHider:getRealHideObject(hitObjectId)
+                    if object.id ~= nil then
+                        self.raycastHideObject = object
+                        if MapObjectsHider.debug then
+                            -- debug hide object
+                            self.hideObjectDebugInfo = MapObjectsHider:getObjectDebugInfo(object.id)
+                        end
+                        return false
+                    end
+                else
+                    local object = g_currentMission:getNodeObject(hitObjectId)
+                    if object:isa(Placeable) then
+                        local storeItem = g_storeManager:getItemByXMLFilename(object.configFileName)
+                        self.raycastHideObject = {name = storeItem.name, object = object, isSellable = true}
+                        if MapObjectsHider.debug then
+                            -- debug placeable
+                            self.hideObjectDebugInfo = {storeItem = storeItem}
+                        end
+                        return false
+                    end
                 end
-                self.raycastHittedObject = object
-                return false
             end
         end
     end
@@ -74,9 +85,13 @@ end
 
 function PlayerExtension:updateActionEvents(superFunc)
     superFunc(self)
-    if self.raycastHittedObject ~= nil then
+    if self.raycastHideObject ~= nil then
         local id = self.inputInformation.registrationList[InputAction.MAP_OBJECT_HIDER_HIDE].eventId
-        g_inputBinding:setActionEventText(id, g_i18n:getText("moh_HIDE"):format(self.raycastHittedObject.name))
+        if self.raycastHideObject.isSellable then
+            g_inputBinding:setActionEventText(id, g_i18n:getText("moh_SELL"):format(self.raycastHideObject.name))
+        else
+            g_inputBinding:setActionEventText(id, g_i18n:getText("moh_HIDE"):format(self.raycastHideObject.name))
+        end
         g_inputBinding:setActionEventActive(id, true)
         g_inputBinding:setActionEventTextVisibility(id, true)
     else
@@ -87,15 +102,26 @@ function PlayerExtension:updateActionEvents(superFunc)
 end
 
 function PlayerExtension:hideObjectActionEvent()
-    if self.raycastHittedObject ~= nil then
-        self.raycastHittedObjectIdBackup = self.raycastHittedObject.id
-        g_gui:showYesNoDialog({text = g_i18n:getText("moh_dialog_text"):format(self.raycastHittedObject.name), title = g_i18n:getText("moh_dialog_title"), callback = self.hideObjectDialogCallback, target = self})
+    if self.raycastHideObject ~= nil then
+        self.raycastHideObjectBackup = self.raycastHideObject
+        if self.raycastHideObject.isSellable then
+            g_gui:showYesNoDialog({text = g_i18n:getText("moh_sell_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.sellObjectDialogCallback, target = self})
+        else
+            g_gui:showYesNoDialog({text = g_i18n:getText("moh_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.hideObjectDialogCallback, target = self})
+        end
     end
 end
 
 function PlayerExtension:hideObjectDialogCallback(yes)
-    if yes and self.raycastHittedObjectIdBackup ~= nil then
-        MapObjectsHider:hideObject(self.raycastHittedObjectIdBackup)
-        self.raycastHittedObjectIdBackup = nil
+    if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.id ~= nil then
+        MapObjectsHider:hideObject(self.raycastHideObjectBackup.id)
+        self.raycastHideObjectBackup = nil
+    end
+end
+
+function PlayerExtension:sellObjectDialogCallback(yes)
+    if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.object ~= nil then
+        -- TODO: fix error given server side
+        g_client:getServerConnection():sendEvent(SellPlaceableEvent:new(self.raycastHideObjectBackup.object))
     end
 end
