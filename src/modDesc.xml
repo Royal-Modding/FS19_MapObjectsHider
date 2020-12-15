@@ -8,18 +8,39 @@
 	<description>
 		<en>
 			<![CDATA[
-			En description
-			]]>
+Have you ever felt like you can't join two fields because of a rock that's right in the middle of them, or you can't build a shed because of some objects that take up space?
+
+These will no longer be problems thanks to "Map Objects Hider", this mod will let you permanently remove decorative objects and placeable items on your maps.
+
+Be careful:
+- Not all object types can be removed.
+- If you change the hierarchy of objects on the map (for example by making changes from GIANTS Editor) some objects may reappear and have to be removed again.
+- If a mod map is not built correctly, removing some trees may cause the above problem.
+]]>
 		</en>
 		<de>
 			<![CDATA[
-			De description
-			]]>
+Hatten Sie schon einmal das Gefühl, dass Sie zwei Felder nicht miteinander verbinden können, weil ein Felsen genau in der Mitte liegt, oder dass Sie einen Schuppen nicht bauen können, weil einige Objekte Platz wegnehmen?
+
+Mit "Map Objects Hider" ist das kein Problem mehr, denn mit diesem Mod können Sie dekorative Objekte und platzierbare Gegenstände auf Ihren Karten dauerhaft entfernen.
+
+Aber Vorsicht!
+- Nicht alle Objekttypen können entfernt werden.
+- Wenn Sie die Hierarchie der Objekte auf der Karte verändern (z.B. durch Änderungen im GIANTS Editor), können einige Objekte wieder auftauchen und müssen erneut entfernt werden.
+- Wenn eine Mod-Map nicht korrekt aufgebaut ist, kann das Entfernen einiger Bäume das oben genannte Problem verursachen.
+]]>
 		</de>
 		<fr>
 			<![CDATA[
-			Fr description
-			]]>
+Avez-vous déjà eu l'impression que vous ne pouvez pas joindre deux champs à cause d'un rocher qui se trouve en plein milieu, ou que vous ne pouvez pas construire un hangar à cause de certains objets qui prennent de l'espace ?
+
+Ces problèmes ne se poseront plus grâce à "Map Objects Hider", ce mod vous permettra de supprimer définitivement les objets décoratifs et les objets pouvant être placés sur vos cartes.
+
+Faites attention :
+- Tous les types d'objets ne peuvent pas être supprimés.
+- Si vous modifiez la hiérarchie des objets sur la carte (par exemple en effectuant des changements à partir de l'éditeur GIANTS), certains objets peuvent réapparaître et doivent être supprimés à nouveau.
+- Si une carte de mod n'est pas construite correctement, la suppression de certains arbres peut causer le problème ci-dessus.
+]]>
 		</fr>
 	</description>
 	<multiplayer supported="true" />
@@ -46,77 +67,26 @@
 	<l10n>
 		<text name="input_MAP_OBJECT_HIDER_HIDE">
 			<en>Hide a map object</en>
+			<de>Ausblenden eines Kartenobjekts</de>
 		</text>
 		<text name="moh_HIDE">
-			<en>Hide object (%s)</en>
+			<en>Hide (%s)</en>
+			<de>Ausblenden (%s)</de>
 		</text>
 		<text name="moh_SELL">
 			<en>Sell (%s)</en>
+			<de>Verkaufen (%s)</de>
 		</text>
 		<text name="moh_dialog_text">
 			<en>Are you sure you want to hide %s ?</en>
+			<de>Sind Sie sicher, dass Sie %s ausblenden möchten?</de>
 		</text>
 		<text name="moh_sell_dialog_text">
 			<en>Are you sure you want to sell %s ?</en>
+			<de>Sind Sie sicher, dass Sie %s verkaufen möchten?</de>
 		</text>
 		<text name="moh_dialog_title">
 			<en>Map Objects Hider</en>
 		</text>
 	</l10n>
 </modDesc>
-
-<!--
-	<storeItems>
-		<storeItem xmlFilename="storeItem.xml" />
-	</storeItems>
-
-	<specializations>
-		<specialization name="specName" className="SpecClass" filename="specName.lua" />
-	</specializations>
-
-	<vehicleTypes>
-		<type name="typeName" parent="baseDrivable" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
-			<specialization name="specName" />
-		</type>
-	</vehicleTypes>
-
-	<jointTypes>
-		<jointType name="jointTypeName" />
-	</jointTypes>
-
-	<brands>
-		<brand name="BRAND" title="Brand" image="brand_brand.png" />
-	</brands>
-
-	<brandColors>
-		<color name="BRAND_RED1" value="0.4508 0.0176 0.0232 0" />
-	</brandColors>
-
-	<placeableTypes>
-		<placeableType name="placeableTypeName" className="PlaceableTypeClass" filename="placeableType.lua" />
-	</placeableTypes>
-
-	<materialHolders>
-		<materialHolder filename="particleSystems/particle_materialHolder.i3d" />
-	</materialHolders>
-
-	<baleTypes>
-		<baleType filename="objects/roundbales/roundbaleBio.i3d" fillType="WOODCHIPS" isRoundbale="true" width="1.12" diameter="1.3" />
-	</baleTypes>
-
-	<connectionHoseTypes>
-		<connectionHoseType name="connectionHoseName">
-			<adapter name="DEFAULT" filename="shared/connectionHoses/connectors.i3d" node="0|0" />
-			<material name="DEFAULT" filename="$data/shared/connectionHoses/hoseMaterialHolder.i3d" materialNode="1" defaultColor="0.01 0.01 0.01 0" uvOffset="0 0.5" uvScale="2 1" />
-		</connectionHoseType>
-	</connectionHoseTypes>
-
-	l10n/l10n_en.xml, l10n/l10n_de.xml, l10n/l10n_it.xml, ...
-	<l10n filenamePrefix="l10n/l10n" />
-
-	<l10n>
-		<text name="text_key">
-			<en>Text</en>
-		</text>
-	</l10n>
--->
