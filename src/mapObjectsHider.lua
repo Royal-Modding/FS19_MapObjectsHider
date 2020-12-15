@@ -12,7 +12,6 @@ MapObjectsHider = RoyalMod.new(r_debug_r, true)
 MapObjectsHider.hiddenObjects = {}
 
 function MapObjectsHider:initialize()
-    Utility.prependedFunction(BaseMission, "findDynamicObjects", self.findDynamicObjects)
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
     Utility.overwrittenFunction(Player, "update", PlayerExtension.update)
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
@@ -35,30 +34,20 @@ function MapObjectsHider:onMissionInitialize(baseDirectory, missionCollaborators
 end
 
 function MapObjectsHider:onSetMissionInfo(missionInfo, missionDynamicInfo)
+    if missionDynamicInfo.isMultiplayer then
+        -- disable findDynamicObjects to prevent rigid body removal on mp
+        BaseMission.findDynamicObjects = function()
+        end
+    end
 end
 
 function MapObjectsHider:onLoad()
-    --DebugUtil.printTableRecursively(SellPlaceableEvent)
 end
 
 function MapObjectsHider:onPreLoadMap(mapFile)
 end
 
 function MapObjectsHider:onCreateStartPoint(startPointNode)
-end
-
-function MapObjectsHider:findDynamicObjects(node)
-    if self.missionDynamicInfo.isMultiplayer then
-        for i = 1, getNumOfChildren(node) do
-            local c = getChildAt(node, i - 1)
-            if "Dynamic" == getRigidBodyType(c) and (not getHasClassId(c, ClassIds.SHAPE) or getSplitType(c) == 0) then
-                if Utils.getNoNil(getUserAttribute(c, "mpRemoveRigidBody"), true) then
-                    -- TODO: fix this cause it's not working
-                    setUserAttribute(c, "mpRemoveRigidBody", "boolean", false)
-                end
-            end
-        end
-    end
 end
 
 function MapObjectsHider:onLoadMap(mapNode, mapFile)

@@ -121,7 +121,6 @@ end
 
 function PlayerExtension:sellObjectDialogCallback(yes)
     if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.object ~= nil then
-        -- TODO: fix error given server side
         g_client:getServerConnection():sendEvent(SellPlaceableEvent:new(self.raycastHideObjectBackup.object))
     end
 end
