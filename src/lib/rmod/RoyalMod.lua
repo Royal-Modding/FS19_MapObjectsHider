@@ -2,7 +2,7 @@
 -- Royal Mod
 --
 -- @author Royal Modding
--- @version 1.2.0.0
+-- @version 1.3.0.0
 -- @date 03/12/2020
 
 ---@class RoyalMod
@@ -230,7 +230,11 @@ function RoyalMod.new(debug, mpSync)
             end
         end
 
+        local vehicleTypesCount = 0
+
         for typeName, typeEntry in pairs(self:getVehicleTypes()) do
+            vehicleTypesCount = vehicleTypesCount + 1
+
             -- add "global" specializations
             for _, spec in pairs(specs) do
                 if typeEntry.specializationsByName[spec.name] == nil then
@@ -239,6 +243,20 @@ function RoyalMod.new(debug, mpSync)
                         table.insert(spec.addedTo, typeName)
                     else
                         g_logManager:devError("[%s] Not all prerequisites of specialization %s are fulfilled by %s", mod.name, spec.name, typeName)
+                    end
+                end
+            end
+
+            -- add specializations by function
+            for _, spec in pairs(specsByFunc) do
+                if spec.func(typeEntry) then
+                    if typeEntry.specializationsByName[spec.name] == nil then
+                        if g_specializationManager:getSpecializationObjectByName(spec.name).prerequisitesPresent(typeEntry.specializations) then
+                            self:addSpecialization(typeName, spec.name)
+                            table.insert(spec.addedTo, typeName)
+                        else
+                            g_logManager:devError("[%s] Not all prerequisites of specialization %s are fulfilled by %s", mod.name, spec.name, typeName)
+                        end
                     end
                 end
             end
@@ -272,36 +290,38 @@ function RoyalMod.new(debug, mpSync)
                     end
                 end
             end
-
-            -- add specializations by function
-            for _, spec in pairs(specsByFunc) do
-                if spec.func(typeEntry) then
-                    if typeEntry.specializationsByName[spec.name] == nil then
-                        if g_specializationManager:getSpecializationObjectByName(spec.name).prerequisitesPresent(typeEntry.specializations) then
-                            self:addSpecialization(typeName, spec.name)
-                            table.insert(spec.addedTo, typeName)
-                        else
-                            g_logManager:devError("[%s] Not all prerequisites of specialization %s are fulfilled by %s", mod.name, spec.name, typeName)
-                        end
-                    end
-                end
-            end
         end
 
         for _, spec in pairs(specs) do
-            g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            if #spec.addedTo <= 25 then
+                g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            else
+                g_logManager:devInfo("[%s] %s added to %s vehicle types out of %s", mod.name, spec.name, #spec.addedTo, vehicleTypesCount)
+            end
         end
 
         for _, spec in pairs(specsBySpec) do
-            g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            if #spec.addedTo <= 25 then
+                g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            else
+                g_logManager:devInfo("[%s] %s added to %s vehicle types out of %s", mod.name, spec.name, #spec.addedTo, vehicleTypesCount)
+            end
         end
 
         for _, spec in pairs(specsByType) do
-            g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            if #spec.addedTo <= 25 then
+                g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            else
+                g_logManager:devInfo("[%s] %s added to %s vehicle types out of %s", mod.name, spec.name, #spec.addedTo, vehicleTypesCount)
+            end
         end
 
         for _, spec in pairs(specsByFunc) do
-            g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            if #spec.addedTo <= 25 then
+                g_logManager:devInfo("[%s] %s added to [%s]", mod.name, spec.name, table.concat(spec.addedTo, ", "))
+            else
+                g_logManager:devInfo("[%s] %s added to %s vehicle types out of %s", mod.name, spec.name, #spec.addedTo, vehicleTypesCount)
+            end
         end
 
         mod.super.oldFunctions.VehicleTypeManagerfinalizeVehicleTypes(self, ...)

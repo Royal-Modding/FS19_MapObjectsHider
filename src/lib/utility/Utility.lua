@@ -2,7 +2,7 @@
 -- Royal Utility
 --
 -- @author Royal Modding
--- @version 1.4.0.2
+-- @version 1.5.1.0
 -- @date 09/11/2020
 
 --- Utility class
@@ -201,7 +201,7 @@ function Utility.f_filter(t, func)
     local new = {}
     for _, v in pairs(t) do
         if func(v) then
-            Utility.insert(new, v)
+            table.insert(new, v)
         end
     end
     return new
@@ -214,7 +214,7 @@ end
 function Utility.removeValue(t, value)
     for k, v in pairs(t) do
         if v == value then
-            Utility.remove(t, k)
+            table.remove(t, k)
             return true
         end
     end
@@ -227,7 +227,7 @@ end
 function Utility.f_remove(t, func)
     for k, v in pairs(t) do
         if func(v) then
-            Utility.remove(t, k)
+            table.remove(t, k)
         end
     end
 end
@@ -268,7 +268,7 @@ end
 ---@param j integer
 ---@return string|nil
 function Utility.concatNil(t, sep, i, j)
-    local res = Utility.concat(t, sep, i, j)
+    local res = table.concat(t, sep, i, j)
     if res == "" then
         res = nil
     end
@@ -650,11 +650,15 @@ function Utility.getNodeHierarchyHash(node, parent)
     Utility.queryNodeHierarchy(
         node,
         function(n, name)
-            local pos = floatsToString(getWorldTranslation(n))
-            local rot = floatsToString(getWorldRotation(n))
+            local rbt = getRigidBodyType(n)
+            local pos = ""
+            local rot = ""
+            if rbt ~= "Dynamic" then
+                pos = floatsToString(getWorldTranslation(n))
+                rot = floatsToString(getWorldRotation(n))
+            end
             local sca = floatsToString(getScale(n))
             local index = Utility.nodeToIndex(node, parent)
-            local rbt = getRigidBodyType(n)
             local vis = getVisibility(n)
             hash = string.format("%s>->%s-->%s-->%s-->%s-->%s-->%s-->%s", hash, name, pos, rot, sca, index, rbt, vis)
             nodeCount = nodeCount + 1
@@ -680,4 +684,43 @@ function Utility.queryNodeParents(inputNode, func)
         pNode = getParent(pNode)
         depth = depth + 1
     end
+end
+
+--- Draw a rectangle (for debugging purpose)
+---@param node integer ref node
+---@param minX number minX
+---@param maxX number maxX
+---@param minZ number minZ
+---@param maxZ number maxZ
+---@param yOffset number height offset
+---@param alignToGround boolean alignToGround
+---@param r number r
+---@param g number g
+---@param b number b
+---@param ar number r color if active
+---@param ag number g color if active
+---@param ab number b color if active
+---@param active boolean active?
+function Utility.drawDebugRectangle(node, minX, maxX, minZ, maxZ, yOffset, alignToGround, r, g, b, ar, ag, ab, active)
+    if active then
+        r, g, b = ar, ag, ab
+    end
+
+    local leftFrontX, leftFrontY, leftFrontZ = localToWorld(node, minX, yOffset, maxZ)
+    local rightFrontX, rightFrontY, rightFrontZ = localToWorld(node, maxX, yOffset, maxZ)
+
+    local leftBackX, leftBackY, leftBackZ = localToWorld(node, minX, yOffset, minZ)
+    local rightBackX, rightBackY, rightBackZ = localToWorld(node, maxX, yOffset, minZ)
+
+    if alignToGround then
+        leftFrontY = getTerrainHeightAtWorldPos(g_currentMission.terrainRootNode, leftFrontX, 0, leftFrontZ) + yOffset + 0.1
+        rightFrontY = getTerrainHeightAtWorldPos(g_currentMission.terrainRootNode, rightFrontX, 0, rightFrontZ) + yOffset + 0.1
+        leftBackY = getTerrainHeightAtWorldPos(g_currentMission.terrainRootNode, leftBackX, 0, leftBackZ) + yOffset + 0.1
+        rightBackY = getTerrainHeightAtWorldPos(g_currentMission.terrainRootNode, rightBackX, 0, rightBackZ) + yOffset + 0.1
+    end
+
+    drawDebugLine(leftFrontX, leftFrontY, leftFrontZ, r, g, b, rightFrontX, rightFrontY, rightFrontZ, r, g, b)
+    drawDebugLine(rightFrontX, rightFrontY, rightFrontZ, r, g, b, rightBackX, rightBackY, rightBackZ, r, g, b)
+    drawDebugLine(rightBackX, rightBackY, rightBackZ, r, g, b, leftBackX, leftBackY, leftBackZ, r, g, b)
+    drawDebugLine(leftBackX, leftBackY, leftBackZ, r, g, b, leftFrontX, leftFrontY, leftFrontZ, r, g, b)
 end

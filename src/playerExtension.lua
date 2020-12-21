@@ -69,12 +69,14 @@ function PlayerExtension:raycastCallback(hitObjectId)
                     local object = g_currentMission:getNodeObject(hitObjectId)
                     if object:isa(Placeable) then
                         local storeItem = g_storeManager:getItemByXMLFilename(object.configFileName)
-                        self.raycastHideObject = {name = storeItem.name, object = object, isSellable = true}
-                        if MapObjectsHider.debug then
-                            -- debug placeable
-                            self.hideObjectDebugInfo = {storeItem = storeItem}
+                        if storeItem ~= nil then
+                            self.raycastHideObject = {name = storeItem.name, object = object, isSellable = true}
+                            if MapObjectsHider.debug then
+                                -- debug placeable
+                                self.hideObjectDebugInfo = {storeItem = storeItem}
+                            end
+                            return false
                         end
-                        return false
                     end
                 end
             end

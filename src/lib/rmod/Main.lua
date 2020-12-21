@@ -2,7 +2,7 @@
 -- Royal Mod
 --
 -- @author Royal Modding
--- @version 1.2.0.0
+-- @version 1.3.0.0
 -- @date 03/12/2020
 
 --- Initialize RoyalMod
