@@ -48,6 +48,7 @@ Faites attention :
 	<extraSourceFiles>
 		<sourceFile filename="lib/utility/Main.lua" />
 		<sourceFile filename="lib/rmod/Main.lua" />
+		<sourceFile filename="lib/rset/Main.lua" />
 		<sourceFile filename="mapObjectsHider.lua" />
 		<sourceFile filename="playerExtension.lua" />
 		<sourceFile filename="events/objectHideRequest.lua" />
@@ -87,6 +88,21 @@ Faites attention :
 		</text>
 		<text name="moh_dialog_title">
 			<en>Map Objects Hider</en>
+		</text>
+		<text name="moh_mod_settings_title">
+			<en>Map Objects Hider</en>
+		</text>
+		<text name="moh_hide_confirm_enabled">
+			<en>Objects confirm dialog</en>
+		</text>
+		<text name="moh_hide_confirm_enabled_tooltip">
+			<en>Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)</en>
+		</text>
+		<text name="moh_sell_confirm_enabled">
+			<en>Placeable confirm dialog</en>
+		</text>
+		<text name="moh_sell_confirm_enabled_tooltip">
+			<en>Whether to show a confirmation dialog before selling a placeable</en>
 		</text>
 	</l10n>
 </modDesc>

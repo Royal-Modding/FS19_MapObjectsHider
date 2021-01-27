@@ -107,9 +107,17 @@ function PlayerExtension:hideObjectActionEvent()
     if self.raycastHideObject ~= nil then
         self.raycastHideObjectBackup = self.raycastHideObject
         if self.raycastHideObject.isSellable then
-            g_gui:showYesNoDialog({text = g_i18n:getText("moh_sell_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.sellObjectDialogCallback, target = self})
+            if MapObjectsHider.sellConfirmEnabled then
+                g_gui:showYesNoDialog({text = g_i18n:getText("moh_sell_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.sellObjectDialogCallback, target = self})
+            else
+                self:sellObjectDialogCallback(true)
+            end
         else
-            g_gui:showYesNoDialog({text = g_i18n:getText("moh_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.hideObjectDialogCallback, target = self})
+            if MapObjectsHider.hideConfirmEnabled then
+                g_gui:showYesNoDialog({text = g_i18n:getText("moh_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.hideObjectDialogCallback, target = self})
+            else
+                self:hideObjectDialogCallback(true)
+            end
         end
     end
 end

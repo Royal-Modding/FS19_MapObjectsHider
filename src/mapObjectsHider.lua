@@ -7,11 +7,14 @@
 
 InitRoyalMod(Utils.getFilename("lib/rmod/", g_currentModDirectory))
 InitRoyalUtility(Utils.getFilename("lib/utility/", g_currentModDirectory))
+InitRoyalSettings(Utils.getFilename("lib/rset/", g_currentModDirectory))
 
 ---@class MapObjectsHider : RoyalMod
 MapObjectsHider = RoyalMod.new(r_debug_r, true)
 MapObjectsHider.hiddenObjects = {}
 MapObjectsHider.md5 = not MapObjectsHider.debug
+MapObjectsHider.hideConfirmEnabled = true
+MapObjectsHider.sellConfirmEnabled = true
 
 function MapObjectsHider:initialize()
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
@@ -44,6 +47,37 @@ function MapObjectsHider:onSetMissionInfo(missionInfo, missionDynamicInfo)
 end
 
 function MapObjectsHider:onLoad()
+    g_royalSettings:registerMod(self.name, self.directory .. "settings_icon.dds", "$l10n_moh_mod_settings_title")
+    g_royalSettings:registerSetting(
+        self.name,
+        "hide_confirm_enabled",
+        g_royalSettings.TYPES.GLOBAL,
+        g_royalSettings.OWNERS.USER,
+        2,
+        {false, true},
+        {"$l10n_ui_off", "$l10n_ui_on"},
+        "$l10n_moh_hide_confirm_enabled",
+        "$l10n_moh_hide_confirm_enabled_tooltip"
+    ):addCallback(self.hideConfirmEnabledChanged, self)
+    g_royalSettings:registerSetting(
+        self.name,
+        "sell_confirm_enabled",
+        g_royalSettings.TYPES.GLOBAL,
+        g_royalSettings.OWNERS.USER,
+        2,
+        {false, true},
+        {"$l10n_ui_off", "$l10n_ui_on"},
+        "$l10n_moh_sell_confirm_enabled",
+        "$l10n_moh_sell_confirm_enabled_tooltip"
+    ):addCallback(self.sellConfirmEnabledChanged, self)
+end
+
+function MapObjectsHider:hideConfirmEnabledChanged(value)
+    self.hideConfirmEnabled = value
+end
+
+function MapObjectsHider:sellConfirmEnabledChanged(value)
+    self.sellConfirmEnabled = value
 end
 
 function MapObjectsHider:onPreLoadMap(mapFile)
