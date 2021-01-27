@@ -2,7 +2,7 @@
 -- Royal Utility
 --
 -- @author Royal Modding
--- @version 1.7.1.0
+-- @version 1.7.2.0
 -- @date 05/01/2021
 
 --- Get the class id and name of an onject
@@ -103,8 +103,9 @@ end
 --- Get the hash of a node hierarchy
 ---@param node integer
 ---@param parent integer
+---@param md5 boolean
 ---@return string hash hash of the node hierarchy
-function Utility.getNodeHierarchyHash(node, parent)
+function Utility.getNodeHierarchyHash(node, parent, md5)
     if not type(node) == "number" or not entityExists(node) or not type(parent) == "number" or not entityExists(parent) then
         return string.format("Invalid hash node:%s parent:%s", node, parent)
     end
@@ -123,25 +124,33 @@ function Utility.getNodeHierarchyHash(node, parent)
         return table.concat(ret, "|")
     end
 
+    local isDyna = false
+
     Utility.queryNodeHierarchy(
         node,
         function(n, name)
             local rbt = getRigidBodyType(n)
+            if rbt == "Dynamic" then
+                isDyna = true
+            end
             local pos = ""
             local rot = ""
-            if rbt ~= "Dynamic" then
+            if not isDyna then
                 pos = floatsToString(getWorldTranslation(n))
                 rot = floatsToString(getWorldRotation(n))
             end
             local sca = floatsToString(getScale(n))
             local index = Utility.nodeToIndex(node, parent)
             local vis = getVisibility(n)
-            hash = string.format("%s>->%s-->%s-->%s-->%s-->%s-->%s-->%s", hash, name, pos, rot, sca, index, rbt, vis)
+            hash = string.format("%s>->%s->%s->%s->%s->%s->%s->%s", hash, name, pos, rot, sca, index, rbt, vis)
             nodeCount = nodeCount + 1
         end
     )
-    return getMD5(string.format("%s%s_dMs5AsHZWy", hash, nodeCount))
-    --return string.format("%s[(%s)]_dMs5AsHZWy", hash, nodeCount)
+    if md5 then
+        return getMD5(string.format("%s%s_dMs5AsHZWy", hash, nodeCount))
+    else
+        return string.format("%s___%s", hash, nodeCount)
+    end
 end
 
 --- Queries node parents (return false to break the loop)

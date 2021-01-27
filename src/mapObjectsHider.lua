@@ -8,8 +8,10 @@
 InitRoyalMod(Utils.getFilename("lib/rmod/", g_currentModDirectory))
 InitRoyalUtility(Utils.getFilename("lib/utility/", g_currentModDirectory))
 
+---@class MapObjectsHider : RoyalMod
 MapObjectsHider = RoyalMod.new(r_debug_r, true)
 MapObjectsHider.hiddenObjects = {}
+MapObjectsHider.md5 = not MapObjectsHider.debug
 
 function MapObjectsHider:initialize()
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
@@ -75,7 +77,7 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                     object.player = getXMLString(xmlFile, key .. "#player") or ""
                     object.id = Utility.indexToNode(object.index, self.mapNode)
                     if object.id ~= nil then
-                        local newHash = Utility.getNodeHierarchyHash(object.id, self.mapNode)
+                        local newHash = Utility.getNodeHierarchyHash(object.id, self.mapNode, self.md5)
                         if newHash == object.hash then
                             self:hideNode(object.id)
                             object.collisions = {}
@@ -267,7 +269,7 @@ function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
     local object = {}
     object.index = Utility.nodeToIndex(objectId, self.mapNode)
     object.id = objectId
-    object.hash = Utility.getNodeHierarchyHash(objectId, self.mapNode)
+    object.hash = Utility.getNodeHierarchyHash(objectId, self.mapNode, self.md5)
     object.name = objectName
     object.date = getDate("%d/%m/%Y")
     object.time = getDate("%H:%M:%S")
@@ -296,7 +298,7 @@ function MapObjectsHider:checkHideObject(object)
         return false
     end
 
-    if object.hash ~= Utility.getNodeHierarchyHash(object.id, self.mapNode) then
+    if object.hash ~= Utility.getNodeHierarchyHash(object.id, self.mapNode, self.md5) then
         return false
     end
 
