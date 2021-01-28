@@ -2,7 +2,7 @@
 -- Royal Mod
 --
 -- @author Royal Modding
--- @version 1.3.0.0
+-- @version 1.3.1.0
 -- @date 03/12/2020
 
 ---@class RoyalMod
@@ -42,7 +42,7 @@ function RoyalMod.new(debug, mpSync)
     mod.super.oldFunctions = {}
 
     mod.super.errorHandle = function(error)
-        g_logManager:devError("[%s] RoyalMod caught error from %s (%s)", mod.name, mod.name, mod.version)
+        g_logManager:devError("RoyalMod caught error from %s (%s)", mod.name, mod.version)
         g_logManager:error(error)
     end
 
@@ -423,6 +423,7 @@ function RoyalMod.new(debug, mpSync)
         mod.super.oldFunctions.Mission00loadOnCreateLoadedObjects(self, xmlFile, ...)
     end
 
+    -- not called on clients in MP games
     mod.super.onLoadFinished = function()
         if mod.onLoadFinished ~= nil then
             xpcall(mod.onLoadFinished, mod.super.errorHandle, mod)

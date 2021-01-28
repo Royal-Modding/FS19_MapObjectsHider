@@ -2,13 +2,13 @@
 -- Royal Mod
 --
 -- @author Royal Modding
--- @version 1.3.0.0
+-- @version 1.3.1.0
 -- @date 03/12/2020
 
 --- Initialize RoyalMod
----@param utilityDirectory string
-function InitRoyalMod(utilityDirectory)
-    source(Utils.getFilename("RoyalMod.lua", utilityDirectory))
+---@param rmodDirectory string
+function InitRoyalMod(rmodDirectory)
+    source(Utils.getFilename("RoyalMod.lua", rmodDirectory))
     g_logManager:devInfo("Royal Mod loaded successfully by " .. g_currentModName)
     return true
 end

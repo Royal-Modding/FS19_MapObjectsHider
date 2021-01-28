@@ -12,6 +12,7 @@ InitRoyalSettings(Utils.getFilename("lib/rset/", g_currentModDirectory))
 ---@class MapObjectsHider : RoyalMod
 MapObjectsHider = RoyalMod.new(r_debug_r, true)
 MapObjectsHider.hiddenObjects = {}
+MapObjectsHider.revision = 1
 MapObjectsHider.md5 = not MapObjectsHider.debug
 MapObjectsHider.hideConfirmEnabled = true
 MapObjectsHider.sellConfirmEnabled = true
@@ -98,6 +99,16 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
         local file = string.format("%smapObjectsHider.xml", savegameDirectory)
         if fileExists(file) then
             local xmlFile = loadXMLFile("mapObjectsHider_xml_temp", file)
+            local savegameUpdate = false
+            local savegameRevision = getXMLInt(xmlFile, "mapObjectsHider#revision") or 0
+            if savegameRevision < self.revision then
+                g_logManager:devInfo("[%s] Updating savegame from revision %d to %d", self.name, savegameRevision, self.revision)
+                savegameUpdate = true
+            end
+            local savegameMd5 = getXMLBool(xmlFile, "mapObjectsHider#md5") or false
+            if savegameMd5 ~= self.md5 then
+                savegameUpdate = true
+            end
             local index = 0
             while true do
                 local key = string.format("mapObjectsHider.hiddenObjects.object(%d)", index)
@@ -112,6 +123,9 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                     object.id = Utility.indexToNode(object.index, self.mapNode)
                     if object.id ~= nil then
                         local newHash = Utility.getNodeHierarchyHash(object.id, self.mapNode, self.md5)
+                        if savegameUpdate then
+                            object.hash = newHash
+                        end
                         if newHash == object.hash then
                             self:hideNode(object.id)
                             object.collisions = {}
@@ -137,8 +151,8 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                         else
                             self:printObjectLoadingError(object.name)
                             if self.debug then
-                                g_logManager:devInfo("Old hash: %s", object.hash)
-                                g_logManager:devInfo("New hash: %s", newHash)
+                                g_logManager:devInfo("  Old: %s", object.hash)
+                                g_logManager:devInfo("  New: %s", newHash)
                             end
                         end
                     else
@@ -235,6 +249,8 @@ function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
         self = MapObjectsHider
         local file = string.format("%smapObjectsHider.xml", savegameDirectory)
         local xmlFile = createXMLFile("mapObjectsHider_xml_temp", file, "mapObjectsHider")
+        setXMLInt(xmlFile, "mapObjectsHider#revision", self.revision)
+        setXMLBool(xmlFile, "mapObjectsHider#md5", self.md5)
         local index = 0
         for _, object in pairs(self.hiddenObjects) do
             local key = string.format("mapObjectsHider.hiddenObjects.object(%d)", index)
@@ -268,7 +284,7 @@ function MapObjectsHider:onDeleteMap()
 end
 
 function MapObjectsHider:printObjectLoadingError(name)
-    g_logManager:warning("Can't find %s, something may have changed in the map hierarchy, the object will be restored.", name)
+    g_logManager:warning("[%s] Can't find %s, something may have changed in the map hierarchy, the object will be restored.", self.name, name)
 end
 
 function MapObjectsHider:hideObject(objectId, name, hiderPlayerName)
