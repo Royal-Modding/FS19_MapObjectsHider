@@ -9,8 +9,13 @@
 		<en>
 			<![CDATA[
 Have you ever felt like you can't join two fields because of a rock that's right in the middle of them, or you can't build a shed because of some objects that take up space?
-
 These will no longer be problems thanks to "Map Objects Hider", this mod will let you permanently remove decorative objects and placeable items on your maps.
+You can open the mod settings panel by pressing RSHIFT + R
+
+Changelog 1.1.0.0:
+- Added settings (RSHIFT + R)
+- Fixed issue with dynamic objects
+- Improved loading to prevent hidden objects from reappear after mod updates
 
 Be careful:
 - Not all object types can be removed.
@@ -21,8 +26,12 @@ Be careful:
 		<de>
 			<![CDATA[
 Hatten Sie schon einmal das Gefühl, dass Sie zwei Felder nicht miteinander verbinden können, weil ein Felsen genau in der Mitte liegt, oder dass Sie einen Schuppen nicht bauen können, weil einige Objekte Platz wegnehmen?
-
 Mit "Map Objects Hider" ist das kein Problem mehr, denn mit diesem Mod können Sie dekorative Objekte und platzierbare Gegenstände auf Ihren Karten dauerhaft entfernen.
+
+Changelog 1.1.0.0:
+- Einstellungen hinzugefügt (RSHIFT + R)
+- Problem mit dynamischen Objekten behoben
+- Verbessertes Laden, um zu verhindern, dass versteckte Objekte nach Mod-Updates wieder auftauchen
 
 Aber Vorsicht!
 - Nicht alle Objekttypen können entfernt werden.
@@ -33,8 +42,12 @@ Aber Vorsicht!
 		<fr>
 			<![CDATA[
 Avez-vous déjà eu l'impression que vous ne pouvez pas joindre deux champs à cause d'un rocher qui se trouve en plein milieu, ou que vous ne pouvez pas construire un hangar à cause de certains objets qui prennent de l'espace ?
-
 Ces problèmes ne se poseront plus grâce à "Map Objects Hider", ce mod vous permettra de supprimer définitivement les objets décoratifs et les objets pouvant être placés sur vos cartes.
+
+Changelog 1.1.0.0:
+- Paramètres ajoutés (RSHIFT + R)
+- Correction d'un problème avec les objets dynamiques
+- Amélioration du chargement pour empêcher les objets cachés de réapparaître après les mises à jour du mod
 
 Faites attention :
 - Tous les types d'objets ne peuvent pas être supprimés.
@@ -94,15 +107,20 @@ Faites attention :
 		</text>
 		<text name="moh_hide_confirm_enabled">
 			<en>Objects confirm dialog</en>
+			<de>Objekte bestätigen Dialog</de>
 		</text>
 		<text name="moh_hide_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)</en>
+			<de>Ob vor dem Ausblenden eines Objekts ein Bestätigungsdialog angezeigt werden soll (es wird dringend empfohlen, ihn aktiviert zu lassen)</de>
 		</text>
 		<text name="moh_sell_confirm_enabled">
 			<en>Placeable confirm dialog</en>
+			<de>Platzierungen bestätigen Dialog</de>
 		</text>
 		<text name="moh_sell_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before selling a placeable</en>
+			<de>Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird</de>
 		</text>
 	</l10n>
+
 </modDesc>

@@ -13,7 +13,23 @@
       "args": [
         "-b",
         "-c",
-        "-s"
+        "-s",
+        "-su"
+      ],
+      "options": {
+        "cwd": "${workspaceRoot}/"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test",
+      "command": "fsmt",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "args": [
+        "-t"
       ],
       "options": {
         "cwd": "${workspaceRoot}/"
@@ -23,10 +39,6 @@
     {
       "label": "Sync",
       "command": "fsmt",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
       "args": [
         "-sync",
         "-c",
@@ -54,7 +66,7 @@
       "label": "Translate",
       "command": "fsmt",
       "args": [
-        "-t"
+        "-tr"
       ],
       "options": {
         "cwd": "${workspaceRoot}/"
