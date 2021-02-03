@@ -1,9 +1,8 @@
---
--- Royal Mod
---
--- @author Royal Modding
--- @version 1.3.1.0
--- @date 03/12/2020
+--- Royal Mod
+
+---@author Royal Modding
+---@version 1.4.0.0
+---@date 03/12/2020
 
 --- Initialize RoyalMod
 ---@param rmodDirectory string

@@ -1,9 +1,8 @@
---
--- Royal Settings
---
--- @author Royal Modding
--- @version 1.0.0.0
--- @date 12/01/2021
+--- Royal Settings
+
+---@author Royal Modding
+---@version 1.1.0.0
+---@date 12/01/2021
 
 --- Initialize RoyalSettings library
 ---@param libDirectory string

@@ -1,9 +1,8 @@
---
--- Royal Utility
---
--- @author Royal Modding
--- @version 1.7.2.0
--- @date 21/11/2020
+--- Royal Utility
+
+---@author Royal Modding
+---@version 1.8.0.0
+---@date 21/11/2020
 
 --- Initialize RoyalUtility
 ---@param utilityDirectory string

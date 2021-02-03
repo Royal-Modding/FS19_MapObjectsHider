@@ -1,9 +1,8 @@
---
--- Royal Utility
---
--- @author Royal Modding
--- @version 1.7.2.0
--- @date 05/01/2021
+--- Royal Utility
+
+---@author Royal Modding
+---@version 1.8.0.0
+---@date 05/01/2021
 
 --- Render a table (for debugging purpose)
 ---@param posX number

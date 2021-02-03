@@ -1,9 +1,8 @@
---
--- ${title}
---
--- @author ${author}
--- @version ${version}
--- @date 02/12/2020
+--- ${title}
+
+---@author ${author}
+---@version r_version_r
+---@date 02/12/2020
 
 ObjectHideRequestEvent = {}
 ObjectHideRequestEvent_mt = Class(ObjectHideRequestEvent, Event)

@@ -1,9 +1,8 @@
---
--- Royal Utility
---
--- @author Royal Modding
--- @version 1.7.2.0
--- @date 11/01/2021
+--- Royal Utility
+
+---@author Royal Modding
+---@version 1.8.0.0
+---@date 11/01/2021
 
 --- Interpolators utilities class
 ---@class InterpolatorUtility
