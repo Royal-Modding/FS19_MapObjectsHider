@@ -82,22 +82,27 @@ Faites attention :
 		<text name="input_MAP_OBJECT_HIDER_HIDE">
 			<en>Hide a map object</en>
 			<de>Ausblenden eines Kartenobjekts</de>
+			<es>Ocultar un objeto del mapa</es>
 		</text>
 		<text name="moh_HIDE">
 			<en>Hide (%s)</en>
 			<de>Ausblenden (%s)</de>
+			<es>Ocultar (%s)</es>
 		</text>
 		<text name="moh_SELL">
 			<en>Sell (%s)</en>
 			<de>Verkaufen (%s)</de>
+			<es>Vender (%s)</es>
 		</text>
 		<text name="moh_dialog_text">
 			<en>Are you sure you want to hide %s ?</en>
 			<de>Sind Sie sicher, dass Sie %s ausblenden möchten?</de>
+			<es>¿Está seguro que quiere ocultar %s ?</es>
 		</text>
 		<text name="moh_sell_dialog_text">
 			<en>Are you sure you want to sell %s ?</en>
 			<de>Sind Sie sicher, dass Sie %s verkaufen möchten?</de>
+			<es>¿Está seguro que quiere vender %s ?</es>
 		</text>
 		<text name="moh_dialog_title">
 			<en>Map Objects Hider</en>
@@ -108,18 +113,22 @@ Faites attention :
 		<text name="moh_hide_confirm_enabled">
 			<en>Objects confirm dialog</en>
 			<de>Objekte bestätigen Dialog</de>
+			<es>Diálogo Confirmación Objetos</es>
 		</text>
 		<text name="moh_hide_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)</en>
 			<de>Ob vor dem Ausblenden eines Objekts ein Bestätigungsdialog angezeigt werden soll (es wird dringend empfohlen, ihn aktiviert zu lassen)</de>
+			<es>Si mostrar un cuadro de diálogo de confirmación antes de ocultar un objeto (se sugiere dejarlo habilitado)</es>
 		</text>
 		<text name="moh_sell_confirm_enabled">
 			<en>Placeable confirm dialog</en>
 			<de>Platzierungen bestätigen Dialog</de>
+			<es>Diálogo Confirmación Colocables</es>
 		</text>
 		<text name="moh_sell_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before selling a placeable</en>
 			<de>Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird</de>
+			<es>Si mostrar un cuadro de diálogo de confirmación antes de vender un colocables</es>
 		</text>
 	</l10n>
 
