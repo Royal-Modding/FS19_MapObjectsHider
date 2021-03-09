@@ -17,6 +17,14 @@ MapObjectsHider.hideConfirmEnabled = true
 MapObjectsHider.sellConfirmEnabled = true
 
 function MapObjectsHider:initialize()
+    -- remove 'SeasonsAnimalDeathFix' of 'HofBergmann' map because it break this mod by "hardcore overriding" Player.updateTick
+    if g_modIsLoaded["FS19_HofBergmann"] then
+        local hbEnv = self.gameEnv["FS19_HofBergmann"]
+        if hbEnv ~= nil then
+            hbEnv.SeasonsAnimalDeathFix.loadMap = function()
+            end
+        end
+    end
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
     Utility.overwrittenFunction(Player, "update", PlayerExtension.update)
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
