@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.0.0
+---@version 1.8.1.0
 ---@date 05/01/2021
 
 --- Render a table (for debugging purpose)
@@ -257,4 +257,78 @@ function Utility.renderAnimCurve(x, y, w, h, curve, numPointsToShow)
         curve.debugGraph = graph
     end
     graph:draw()
+end
+
+--- Get the loading speed meter object
+---@return LoadingSpeedMeter loadingSpeedMeter
+function Utility.getVehicleLoadingSpeedMeter()
+    if Utility.loadingSpeedMeter == nil then
+        ---@class LoadingSpeedMeter
+        Utility.loadingSpeedMeter = {}
+        Utility.loadingSpeedMeter.vehicles = {}
+        Utility.loadingSpeedMeter.filters = {}
+        --- Add a new filter
+        ---@param filterFunction function | 'function(vehicleData) return true, "meter name" end'
+        Utility.loadingSpeedMeter.addFilter = function(filterFunction)
+            table.insert(Utility.loadingSpeedMeter.filters, filterFunction)
+        end
+        Utility.overwrittenFunction(
+            Vehicle,
+            "load",
+            function(self, superFunc, vehicleData, asyncCallbackFunction, asyncCallbackObject, asyncCallbackArguments)
+                local smEnabled = false
+                local smName = ""
+                for _, filter in ipairs(Utility.loadingSpeedMeter.filters) do
+                    smEnabled, smName = filter(vehicleData)
+                    if smEnabled then
+                        break
+                    end
+                end
+
+                if smEnabled then
+                    Utility.loadingSpeedMeter.vehicles[self] = {}
+                    Utility.loadingSpeedMeter.vehicles[self].smName = smName
+                    Utility.loadingSpeedMeter.vehicles[self].totalStartTime = getTimeSec()
+                end
+
+                local state = superFunc(self, vehicleData, asyncCallbackFunction, asyncCallbackObject, asyncCallbackArguments)
+
+                if smEnabled then
+                    Utility.loadingSpeedMeter.vehicles[self].totalTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[self].totalStartTime
+                    print(string.format("[%s] Pre   time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].preLoadTime or 0) * 1000))
+                    print(string.format("[%s] Load  time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].loadTime or 0) * 1000))
+                    print(string.format("[%s] Post  time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].postLoadTime or 0) * 1000))
+                    print(string.format("[%s] Total time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].totalTime or 0) * 1000))
+                    Utility.loadingSpeedMeter.vehicles[self] = nil
+                end
+                return state
+            end
+        )
+        Utility.overwrittenStaticFunction(
+            SpecializationUtil,
+            "raiseEvent",
+            function(superFunc, vehicle, eventName, ...)
+                if Utility.loadingSpeedMeter.vehicles[vehicle] ~= nil then
+                    if eventName == "onPreLoad" then
+                        Utility.loadingSpeedMeter.vehicles[vehicle].preLoadStartTime = getTimeSec()
+                        superFunc(vehicle, eventName, ...)
+                        Utility.loadingSpeedMeter.vehicles[vehicle].preLoadTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[vehicle].preLoadStartTime
+                    end
+                    if eventName == "onLoad" then
+                        Utility.loadingSpeedMeter.vehicles[vehicle].loadStartTime = getTimeSec()
+                        superFunc(vehicle, eventName, ...)
+                        Utility.loadingSpeedMeter.vehicles[vehicle].loadTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[vehicle].loadStartTime
+                    end
+                    if eventName == "onPostLoad" then
+                        Utility.loadingSpeedMeter.vehicles[vehicle].postLoadStartTime = getTimeSec()
+                        superFunc(vehicle, eventName, ...)
+                        Utility.loadingSpeedMeter.vehicles[vehicle].postLoadTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[vehicle].postLoadStartTime
+                    end
+                else
+                    superFunc(vehicle, eventName, ...)
+                end
+            end
+        )
+    end
+    return Utility.loadingSpeedMeter
 end

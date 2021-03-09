@@ -15,6 +15,7 @@ MapObjectsHider.revision = 1
 MapObjectsHider.md5 = not MapObjectsHider.debug
 MapObjectsHider.hideConfirmEnabled = true
 MapObjectsHider.sellConfirmEnabled = true
+MapObjectsHider.deleteSplitShapeConfirmEnabled = true
 
 function MapObjectsHider:initialize()
     -- remove 'SeasonsAnimalDeathFix' of 'HofBergmann' map because it break this mod by "hardcore overriding" Player.updateTick
@@ -25,10 +26,12 @@ function MapObjectsHider:initialize()
             end
         end
     end
+
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
     Utility.overwrittenFunction(Player, "update", PlayerExtension.update)
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
     Utility.overwrittenFunction(Player, "updateActionEvents", PlayerExtension.updateActionEvents)
+
     if Player.raycastCallback == nil then
         Player.raycastCallback = PlayerExtension.raycastCallback
     end
@@ -40,6 +43,9 @@ function MapObjectsHider:initialize()
     end
     if Player.sellObjectDialogCallback == nil then
         Player.sellObjectDialogCallback = PlayerExtension.sellObjectDialogCallback
+    end
+    if Player.deleteSplitShapeDialogCallback == nil then
+        Player.deleteSplitShapeDialogCallback = PlayerExtension.deleteSplitShapeDialogCallback
     end
 end
 
@@ -78,6 +84,17 @@ function MapObjectsHider:onLoad()
         "$l10n_moh_sell_confirm_enabled",
         "$l10n_moh_sell_confirm_enabled_tooltip"
     ):addCallback(self.sellConfirmEnabledChanged, self)
+    g_royalSettings:registerSetting(
+        self.name,
+        "deleteSplitShape_confirm_enabled",
+        g_royalSettings.TYPES.GLOBAL,
+        g_royalSettings.OWNERS.USER,
+        2,
+        {false, true},
+        {"$l10n_ui_off", "$l10n_ui_on"},
+        "$l10n_moh_split_shapes_confirm_enabled",
+        "$l10n_moh_split_shapes_confirm_enabled_tooltip"
+    ):addCallback(self.deleteSplitShapeConfirmEnabledChanged, self)
 end
 
 function MapObjectsHider:hideConfirmEnabledChanged(value)
@@ -86,6 +103,10 @@ end
 
 function MapObjectsHider:sellConfirmEnabledChanged(value)
     self.sellConfirmEnabled = value
+end
+
+function MapObjectsHider:deleteSplitShapeConfirmEnabledChanged(value)
+    self.deleteSplitShapeConfirmEnabled = value
 end
 
 function MapObjectsHider:onPreLoadMap(mapFile)

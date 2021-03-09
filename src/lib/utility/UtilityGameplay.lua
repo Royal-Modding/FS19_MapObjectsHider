@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.0.0
+---@version 1.8.1.0
 ---@date 05/01/2021
 
 --- Get value of a trunk (splitshape)
@@ -75,5 +75,5 @@ function Utility.getFarmName(farmId)
     if farm ~= nil then
         return farm.name
     end
-    return "N/D"
+    return nil
 end

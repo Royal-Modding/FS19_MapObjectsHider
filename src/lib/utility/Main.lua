@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.0.0
+---@version 1.8.1.0
 ---@date 21/11/2020
 
 --- Initialize RoyalUtility
@@ -14,6 +14,7 @@ function InitRoyalUtility(utilityDirectory)
     source(Utils.getFilename("UtilityString.lua", utilityDirectory))
     source(Utils.getFilename("UtilityTable.lua", utilityDirectory))
     source(Utils.getFilename("UtilityInterpolator.lua", utilityDirectory))
+    source(Utils.getFilename("UtilityArray.lua", utilityDirectory))
     g_logManager:devInfo("Royal Utility loaded successfully by " .. g_currentModName)
     return true
 end

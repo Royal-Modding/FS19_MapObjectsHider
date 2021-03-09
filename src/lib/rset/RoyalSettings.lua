@@ -1,13 +1,13 @@
 --- Royal Settings
 
 ---@author Royal Modding
----@version 1.1.0.0
+---@version 1.3.0.0
 ---@date 12/01/2021
 
 ---@class RoyalSettings
 RoyalSettings = {}
 ---@type integer
-RoyalSettings.revision = 1
+RoyalSettings.revision = 4
 ---@type string
 RoyalSettings.loadingModName = g_currentModName
 ---@type string
@@ -96,10 +96,14 @@ function RoyalSettings:onLoadSavegame()
     ---@type RoyalSetting
     for _, setting in pairs(self.settings) do
         local xmlPath = Utils.getFilename(setting:getSavegameFilePath(), self.userProfileDirectory)
-        if fileExists(xmlPath) then
-            if xmlIds[xmlPath] == nil then
+        if xmlIds[xmlPath] == nil then
+            if fileExists(xmlPath) then
                 xmlIds[xmlPath] = loadXMLFile("royalSettingsSave" .. xmlPath, xmlPath)
             end
+        end
+        if xmlIds[xmlPath] == nil then
+            setting:loadDefaults()
+        else
             setting:loadFromXMLFile(xmlIds[xmlPath], self.xmlRootNode)
         end
     end
@@ -115,7 +119,11 @@ function RoyalSettings:onSaveSavegame()
     for _, setting in pairs(self.settings) do
         local xmlPath = Utils.getFilename(setting:getSavegameFilePath(), self.userProfileDirectory)
         if xmlIds[xmlPath] == nil then
-            xmlIds[xmlPath] = createXMLFile("royalSettingsSave" .. xmlPath, xmlPath, self.xmlRootNode)
+            if fileExists(xmlPath) then
+                xmlIds[xmlPath] = loadXMLFile("royalSettingsSave" .. xmlPath, xmlPath)
+            else
+                xmlIds[xmlPath] = createXMLFile("royalSettingsSave" .. xmlPath, xmlPath, self.xmlRootNode)
+            end
             setXMLInt(xmlIds[xmlPath], self.xmlRootNode .. "#revision", self.revision)
         end
         setting:saveToXMLFile(xmlIds[xmlPath], self.xmlRootNode)

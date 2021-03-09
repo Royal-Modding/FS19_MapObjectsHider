@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <modDesc descVersion="${descVersion}">
 	<author>${author}</author>
 	<version>${version}</version>
@@ -66,6 +66,7 @@ Faites attention :
 		<sourceFile filename="playerExtension.lua" />
 		<sourceFile filename="events/objectHideRequest.lua" />
 		<sourceFile filename="events/hideDecollideNode.lua" />
+		<sourceFile filename="events/deleteSplitShapeEvent.lua" />
 	</extraSourceFiles>
 
 	<actions>
@@ -97,17 +98,25 @@ Faites attention :
 			<es>Vender (%s)</es>
 			<pl>Sprzedaj (%s)</pl>
 		</text>
+		<text name="moh_DELETE">
+			<en>Delete (%s)</en>
+			<de>Löschen (%s)</de>
+		</text>
 		<text name="moh_dialog_text">
-			<en>Are you sure you want to hide %s ?</en>
+			<en>Are you sure you want to hide %s?</en>
 			<de>Sind Sie sicher, dass Sie %s ausblenden möchten?</de>
-			<es>¿Está seguro que quiere ocultar %s ?</es>
+			<es>¿Está seguro que quiere ocultar %s?</es>
 			<pl>Jesteś pewien, że chcesz ukryć %s?</pl>
 		</text>
 		<text name="moh_sell_dialog_text">
-			<en>Are you sure you want to sell %s ?</en>
+			<en>Are you sure you want to sell %s?</en>
 			<de>Sind Sie sicher, dass Sie %s verkaufen möchten?</de>
-			<es>¿Está seguro que quiere vender %s ?</es>
+			<es>¿Está seguro que quiere vender %s?</es>
 			<pl>Jesteś pewien, że chcesz sprzedać %s?</pl>
+		</text>
+		<text name="moh_delete_split_shape_dialog_text">
+			<en>Are you sure you want to remove this tree/log?</en>
+			<de>Möchten Sie diesen Baum / dieses Protokoll wirklich entfernen?</de>
 		</text>
 		<text name="moh_dialog_title">
 			<en>Map Objects Hider</en>
@@ -138,6 +147,14 @@ Faites attention :
 			<de>Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird</de>
 			<es>Si mostrar un cuadro de diálogo de confirmación antes de vender un colocables</es>
 			<pl>Czy pokazywać okno dialogowe potwierdzenia przed sprzedaniem obiektu placeable</pl>
+		</text>
+		<text name="moh_split_shapes_confirm_enabled">
+			<en>Trees confirm dialog</en>
+			<de>Bäume bestätigen Dialog</de>
+		</text>
+		<text name="moh_split_shapes_confirm_enabled_tooltip">
+			<en>Whether to show a confirmation dialog before removing trees and logs</en>
+			<de>Gibt an, ob ein Bestätigungsdialogfeld angezeigt werden soll, bevor Bäume und Protokolle entfernt werden</de>
 		</text>
 	</l10n>
 

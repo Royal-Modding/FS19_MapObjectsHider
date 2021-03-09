@@ -52,8 +52,15 @@ function PlayerExtension:raycastCallback(hitObjectId)
                 self.debugInfo = MapObjectsHider:getObjectDebugInfo(hitObjectId)
             end
             local rigidBodyType = getRigidBodyType(hitObjectId)
-            if (rigidBodyType == "Static" or rigidBodyType == "Dynamic") and getSplitType(hitObjectId) == 0 then
-                if g_currentMission:getNodeObject(hitObjectId) == nil then
+            if (rigidBodyType == "Static" or rigidBodyType == "Dynamic") then
+                if getSplitType(hitObjectId) ~= 0 then
+                    self.raycastHideObject = {name = getName(getParent(hitObjectId)), objectId = hitObjectId, isSplitShape = true}
+                    if MapObjectsHider.debug then
+                        -- debug placeable
+                        self.hideObjectDebugInfo = {splitType = g_splitTypeManager:getSplitTypeByIndex(getSplitType(hitObjectId))}
+                    end
+                    return false
+                elseif g_currentMission:getNodeObject(hitObjectId) == nil then
                     local object = {}
                     object.id, object.name = MapObjectsHider:getRealHideObject(hitObjectId)
                     if object.id ~= nil then
@@ -90,6 +97,8 @@ function PlayerExtension:updateActionEvents(superFunc)
         local id = self.inputInformation.registrationList[InputAction.MAP_OBJECT_HIDER_HIDE].eventId
         if self.raycastHideObject.isSellable then
             g_inputBinding:setActionEventText(id, g_i18n:getText("moh_SELL"):format(self.raycastHideObject.name))
+        elseif self.raycastHideObject.isSplitShape then
+            g_inputBinding:setActionEventText(id, g_i18n:getText("moh_DELETE"):format(self.raycastHideObject.name))
         else
             g_inputBinding:setActionEventText(id, g_i18n:getText("moh_HIDE"):format(self.raycastHideObject.name))
         end
@@ -111,6 +120,12 @@ function PlayerExtension:hideObjectActionEvent()
             else
                 self:sellObjectDialogCallback(true)
             end
+        elseif self.raycastHideObject.isSplitShape then
+            if MapObjectsHider.deleteSplitShapeConfirmEnabled then
+                g_gui:showYesNoDialog({text = g_i18n:getText("moh_delete_split_shape_dialog_text"), title = g_i18n:getText("moh_dialog_title"), callback = self.deleteSplitShapeDialogCallback, target = self})
+            else
+                self:deleteSplitShapeDialogCallback(true)
+            end
         else
             if MapObjectsHider.hideConfirmEnabled then
                 g_gui:showYesNoDialog({text = g_i18n:getText("moh_dialog_text"):format(self.raycastHideObjectBackup.name), title = g_i18n:getText("moh_dialog_title"), callback = self.hideObjectDialogCallback, target = self})
@@ -131,5 +146,11 @@ end
 function PlayerExtension:sellObjectDialogCallback(yes)
     if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.object ~= nil then
         g_client:getServerConnection():sendEvent(SellPlaceableEvent:new(self.raycastHideObjectBackup.object))
+    end
+end
+
+function PlayerExtension:deleteSplitShapeDialogCallback(yes)
+    if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.objectId ~= nil then
+        g_client:getServerConnection():sendEvent(DeleteSplitShapeEvent:new(self.raycastHideObjectBackup.objectId))
     end
 end
