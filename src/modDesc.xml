@@ -101,6 +101,7 @@ Faites attention :
 		<text name="moh_DELETE">
 			<en>Delete (%s)</en>
 			<de>Löschen (%s)</de>
+			<pl>Usuń (%s)</pl>
 		</text>
 		<text name="moh_dialog_text">
 			<en>Are you sure you want to hide %s?</en>
@@ -117,6 +118,7 @@ Faites attention :
 		<text name="moh_delete_split_shape_dialog_text">
 			<en>Are you sure you want to remove this tree/log?</en>
 			<de>Möchten Sie diesen Baum / dieses Protokoll wirklich entfernen?</de>
+			<pl>Jesteś pewien, że chcesz usunąć to drzewo/kłodę?</pl>
 		</text>
 		<text name="moh_dialog_title">
 			<en>Map Objects Hider</en>
@@ -151,10 +153,12 @@ Faites attention :
 		<text name="moh_split_shapes_confirm_enabled">
 			<en>Trees confirm dialog</en>
 			<de>Bäume bestätigen Dialog</de>
+			<pl>Okno potwierdzania drzew<pl>
 		</text>
 		<text name="moh_split_shapes_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before removing trees and logs</en>
 			<de>Gibt an, ob ein Bestätigungsdialogfeld angezeigt werden soll, bevor Bäume und Protokolle entfernt werden</de>
+			<pl>Czy pokazywać okno dialogowe potwierdzenia przed usunięciem drzew i kłód</pl>
 		</text>
 	</l10n>
 
