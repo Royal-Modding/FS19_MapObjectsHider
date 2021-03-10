@@ -82,40 +82,47 @@ Faites attention :
 	<l10n>
 		<text name="input_MAP_OBJECT_HIDER_HIDE">
 			<en>Hide a map object</en>
+			<fr>Masquer un objet sur la carte</fr>
 			<de>Ausblenden eines Kartenobjekts</de>
 			<es>Ocultar un objeto del mapa</es>
 			<pl>Ukrywanie obiektów na mapie</pl>
 		</text>
 		<text name="moh_HIDE">
 			<en>Hide (%s)</en>
+			<fr>Masquer (%s)</fr>
 			<de>Ausblenden (%s)</de>
 			<es>Ocultar (%s)</es>
 			<pl>Ukryj (%s)</pl>
 		</text>
 		<text name="moh_SELL">
 			<en>Sell (%s)</en>
+			<fr>Vendre (%s)</fr>
 			<de>Verkaufen (%s)</de>
 			<es>Vender (%s)</es>
 			<pl>Sprzedaj (%s)</pl>
 		</text>
 		<text name="moh_DELETE">
 			<en>Delete (%s)</en>
+			<fr>Supprimer (%s)</fr>
 			<de>Löschen (%s)</de>
 		</text>
 		<text name="moh_dialog_text">
 			<en>Are you sure you want to hide %s?</en>
+			<fr>Etes-vous sûr de vouloir masquer %s ?</fr>
 			<de>Sind Sie sicher, dass Sie %s ausblenden möchten?</de>
 			<es>¿Está seguro que quiere ocultar %s?</es>
 			<pl>Jesteś pewien, że chcesz ukryć %s?</pl>
 		</text>
 		<text name="moh_sell_dialog_text">
 			<en>Are you sure you want to sell %s?</en>
+			<fr>Etes-vous sûr de vouloir vendre %s ?</fr>
 			<de>Sind Sie sicher, dass Sie %s verkaufen möchten?</de>
 			<es>¿Está seguro que quiere vender %s?</es>
 			<pl>Jesteś pewien, że chcesz sprzedać %s?</pl>
 		</text>
 		<text name="moh_delete_split_shape_dialog_text">
 			<en>Are you sure you want to remove this tree/log?</en>
+			<fr>Etes-vous sûr de vouloir supprimer cet arbre ?</fr>
 			<de>Möchten Sie diesen Baum / dieses Protokoll wirklich entfernen?</de>
 		</text>
 		<text name="moh_dialog_title">
@@ -126,34 +133,40 @@ Faites attention :
 		</text>
 		<text name="moh_hide_confirm_enabled">
 			<en>Objects confirm dialog</en>
+			<fr>Message de confirmation lors du masquage</fr>
 			<de>Objekte bestätigen Dialog</de>
 			<es>Diálogo Confirmación Objetos</es>
 			<pl>Okno potwierdzania obiektów</pl>
 		</text>
 		<text name="moh_hide_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)</en>
+			<fr>Utilisation d'une confirmation lors du masquage (fortement conseillée)</fr>
 			<de>Ob vor dem Ausblenden eines Objekts ein Bestätigungsdialog angezeigt werden soll (es wird dringend empfohlen, ihn aktiviert zu lassen)</de>
 			<es>Si mostrar un cuadro de diálogo de confirmación antes de ocultar un objeto (se sugiere dejarlo habilitado)</es>
 			<pl>Czy pokazywać okno dialogowe potwierdzenia przed ukryciem obiektu (zdecydowanie zaleca się pozostawienie go włączonego)</pl>
 		</text>
 		<text name="moh_sell_confirm_enabled">
 			<en>Placeable confirm dialog</en>
+			<fr>Message de confirmation lors de la vente</fr>
 			<de>Platzierungen bestätigen Dialog</de>
 			<es>Diálogo Confirmación Colocables</es>
 			<pl>Okno potwierdzania obiektów placeable</pl>
 		</text>
 		<text name="moh_sell_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before selling a placeable</en>
+			<fr>Utilisation d'une confirmation lors de la vente</fr>
 			<de>Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird</de>
 			<es>Si mostrar un cuadro de diálogo de confirmación antes de vender un colocables</es>
 			<pl>Czy pokazywać okno dialogowe potwierdzenia przed sprzedaniem obiektu placeable</pl>
 		</text>
 		<text name="moh_split_shapes_confirm_enabled">
 			<en>Trees confirm dialog</en>
+			<fr>Message de confirmation lors de la suppression d'arbres</fr>
 			<de>Bäume bestätigen Dialog</de>
 		</text>
 		<text name="moh_split_shapes_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before removing trees and logs</en>
+			<fr>Utilisation d'une confirmation lors de la suppression d'arbres</fr>
 			<de>Gibt an, ob ein Bestätigungsdialogfeld angezeigt werden soll, bevor Bäume und Protokolle entfernt werden</de>
 		</text>
 	</l10n>
