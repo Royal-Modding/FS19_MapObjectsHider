@@ -165,7 +165,7 @@ Faites attention :
 			<en>Trees confirm dialog</en>
 			<fr>Message de confirmation lors de la suppression d'arbres</fr>
 			<de>Bäume bestätigen Dialog</de>
-			<pl>Okno potwierdzania drzew<pl>
+			<pl>Okno potwierdzania drzew</pl>
 		</text>
 		<text name="moh_split_shapes_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before removing trees and logs</en>
