@@ -86,6 +86,7 @@ Faites attention :
 			<de>Ausblenden eines Kartenobjekts</de>
 			<es>Ocultar un objeto del mapa</es>
 			<pl>Ukrywanie obiektów na mapie</pl>
+			<ru>Скрыть объект</ru>
 		</text>
 		<text name="moh_HIDE">
 			<en>Hide (%s)</en>
@@ -93,6 +94,7 @@ Faites attention :
 			<de>Ausblenden (%s)</de>
 			<es>Ocultar (%s)</es>
 			<pl>Ukryj (%s)</pl>
+			<ru>Скрыть (%s)</ru>
 		</text>
 		<text name="moh_SELL">
 			<en>Sell (%s)</en>
@@ -100,6 +102,7 @@ Faites attention :
 			<de>Verkaufen (%s)</de>
 			<es>Vender (%s)</es>
 			<pl>Sprzedaj (%s)</pl>
+			<ru>Продать (%s)</ru>
 		</text>
 		<text name="moh_DELETE">
 			<en>Delete (%s)</en>
@@ -113,6 +116,7 @@ Faites attention :
 			<de>Sind Sie sicher, dass Sie %s ausblenden möchten?</de>
 			<es>¿Está seguro que quiere ocultar %s?</es>
 			<pl>Jesteś pewien, że chcesz ukryć %s?</pl>
+			<ru>Вы уверены, что хотите скрыть %s ?</ru>
 		</text>
 		<text name="moh_sell_dialog_text">
 			<en>Are you sure you want to sell %s?</en>
@@ -120,6 +124,7 @@ Faites attention :
 			<de>Sind Sie sicher, dass Sie %s verkaufen möchten?</de>
 			<es>¿Está seguro que quiere vender %s?</es>
 			<pl>Jesteś pewien, że chcesz sprzedać %s?</pl>
+			<ru>Вы уверены, что хотите продать %s ?</ru>
 		</text>
 		<text name="moh_delete_split_shape_dialog_text">
 			<en>Are you sure you want to remove this tree/log?</en>
@@ -139,6 +144,7 @@ Faites attention :
 			<de>Objekte bestätigen Dialog</de>
 			<es>Diálogo Confirmación Objetos</es>
 			<pl>Okno potwierdzania obiektów</pl>
+			<ru>Диалог подтверждения</ru>
 		</text>
 		<text name="moh_hide_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)</en>
@@ -146,6 +152,7 @@ Faites attention :
 			<de>Ob vor dem Ausblenden eines Objekts ein Bestätigungsdialog angezeigt werden soll (es wird dringend empfohlen, ihn aktiviert zu lassen)</de>
 			<es>Si mostrar un cuadro de diálogo de confirmación antes de ocultar un objeto (se sugiere dejarlo habilitado)</es>
 			<pl>Czy pokazywać okno dialogowe potwierdzenia przed ukryciem obiektu (zdecydowanie zaleca się pozostawienie go włączonego)</pl>
+			<ru>Следует ли показывать диалоговое окно подтверждения перед скрытием объекта (Настоятельно рекомендуется оставить его включённым)</ru>
 		</text>
 		<text name="moh_sell_confirm_enabled">
 			<en>Placeable confirm dialog</en>
@@ -153,6 +160,7 @@ Faites attention :
 			<de>Platzierungen bestätigen Dialog</de>
 			<es>Diálogo Confirmación Colocables</es>
 			<pl>Okno potwierdzania obiektów placeable</pl>
+			<ru>Отображаемый диалог подтверждения</ru>
 		</text>
 		<text name="moh_sell_confirm_enabled_tooltip">
 			<en>Whether to show a confirmation dialog before selling a placeable</en>
@@ -160,6 +168,7 @@ Faites attention :
 			<de>Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird</de>
 			<es>Si mostrar un cuadro de diálogo de confirmación antes de vender un colocables</es>
 			<pl>Czy pokazywać okno dialogowe potwierdzenia przed sprzedaniem obiektu placeable</pl>
+			<ru>Показывать ли диалоговое окно подтверждения перед продажей объекта</ru>
 		</text>
 		<text name="moh_split_shapes_confirm_enabled">
 			<en>Trees confirm dialog</en>
