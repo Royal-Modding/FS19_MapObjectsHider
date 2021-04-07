@@ -14,27 +14,33 @@ function DeleteSplitShapeEvent:emptyNew()
     return e
 end
 
+---@param splitShapeId integer
+---@return table
 function DeleteSplitShapeEvent:new(splitShapeId)
     local e = DeleteSplitShapeEvent:emptyNew()
     e.splitShapeId = splitShapeId
     return e
 end
 
-function DeleteSplitShapeEvent:writeStream(streamId, _)
+---@param streamId integer
+function DeleteSplitShapeEvent:writeStream(streamId)
     writeSplitShapeIdToStream(streamId, self.splitShapeId)
 end
 
+---@param streamId integer
+---@param connection Connection
 function DeleteSplitShapeEvent:readStream(streamId, connection)
     self.splitShapeId = readSplitShapeIdFromStream(streamId)
     self:run(connection)
 end
 
-function DeleteSplitShapeEvent:run(_)
+function DeleteSplitShapeEvent:run()
     if self.splitShapeId ~= 0 then
         delete(self.splitShapeId)
     end
 end
 
+---@param splitShapeId integer
 function DeleteSplitShapeEvent.sendEvent(splitShapeId)
     g_client:getServerConnection():sendEvent(DeleteSplitShapeEvent:new(splitShapeId))
 end

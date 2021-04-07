@@ -64,6 +64,7 @@ Faites attention :
 		<sourceFile filename="lib/rset/Main.lua" />
 		<sourceFile filename="mapObjectsHider.lua" />
 		<sourceFile filename="playerExtension.lua" />
+		<sourceFile filename="animatedMapObjectExtension.lua" />
 		<sourceFile filename="events/objectHideRequest.lua" />
 		<sourceFile filename="events/hideDecollideNode.lua" />
 		<sourceFile filename="events/deleteSplitShapeEvent.lua" />

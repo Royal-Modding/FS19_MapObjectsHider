@@ -15,6 +15,9 @@ function HideDecollideNodeEvent:emptyNew()
     return o
 end
 
+---@param objectIndex integer
+---@param hide boolean
+---@return table
 function HideDecollideNodeEvent:new(objectIndex, hide)
     local o = HideDecollideNodeEvent:emptyNew()
     o.objectIndex = objectIndex
@@ -22,17 +25,21 @@ function HideDecollideNodeEvent:new(objectIndex, hide)
     return o
 end
 
-function HideDecollideNodeEvent:writeStream(streamId, connection)
+---@param streamId integer
+function HideDecollideNodeEvent:writeStream(streamId)
     streamWriteString(streamId, self.objectIndex)
     streamWriteBool(streamId, self.hide)
 end
 
+---@param streamId integer
+---@param connection Connection
 function HideDecollideNodeEvent:readStream(streamId, connection)
     self.objectIndex = streamReadString(streamId)
     self.hide = streamReadBool(streamId)
     self:run(connection)
 end
 
+---@param connection Connection
 function HideDecollideNodeEvent:run(connection)
     if g_server == nil then
         if self.hide then
@@ -43,6 +50,8 @@ function HideDecollideNodeEvent:run(connection)
     end
 end
 
+---@param objectIndex integer
+---@param hide boolean
 function HideDecollideNodeEvent.sendToClients(objectIndex, hide)
     if g_server ~= nil then
         g_server:broadcastEvent(HideDecollideNodeEvent:new(objectIndex, hide))

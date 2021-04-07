@@ -10,7 +10,9 @@ InitRoyalSettings(Utils.getFilename("lib/rset/", g_currentModDirectory))
 
 ---@class MapObjectsHider : RoyalMod
 MapObjectsHider = RoyalMod.new(r_debug_r, true)
+---@type HideObject[]
 MapObjectsHider.hiddenObjects = {}
+MapObjectsHider.animatedMapObjectCollisions = {}
 MapObjectsHider.revision = 1
 MapObjectsHider.md5 = not MapObjectsHider.debug
 MapObjectsHider.hideConfirmEnabled = true
@@ -27,6 +29,7 @@ function MapObjectsHider:initialize()
         end
     end
 
+    Utility.overwrittenFunction(AnimatedMapObject, "load", AnimatedMapObjectExtension.load)
     Utility.overwrittenFunction(Player, "updateTick", PlayerExtension.updateTick)
     Utility.overwrittenFunction(Player, "update", PlayerExtension.update)
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
@@ -47,9 +50,6 @@ function MapObjectsHider:initialize()
     if Player.deleteSplitShapeDialogCallback == nil then
         Player.deleteSplitShapeDialogCallback = PlayerExtension.deleteSplitShapeDialogCallback
     end
-end
-
-function MapObjectsHider:onMissionInitialize(baseDirectory, missionCollaborators)
 end
 
 function MapObjectsHider:onSetMissionInfo(missionInfo, missionDynamicInfo)
@@ -97,22 +97,29 @@ function MapObjectsHider:onLoad()
     ):addCallback(self.deleteSplitShapeConfirmEnabledChanged, self)
 end
 
+---@param value boolean
 function MapObjectsHider:hideConfirmEnabledChanged(value)
     self.hideConfirmEnabled = value
 end
 
+---@param value boolean
 function MapObjectsHider:sellConfirmEnabledChanged(value)
     self.sellConfirmEnabled = value
 end
 
+---@param value boolean
 function MapObjectsHider:deleteSplitShapeConfirmEnabledChanged(value)
     self.deleteSplitShapeConfirmEnabled = value
 end
 
+---@param mapNode integer
+---@param mapFile string
 function MapObjectsHider:onLoadMap(mapNode, mapFile)
     self.mapNode = mapNode
 end
 
+---@param savegameDirectory string
+---@param savegameIndex integer
 function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
     if g_server ~= nil then
         local file = string.format("%smapObjectsHider.xml", savegameDirectory)
@@ -132,6 +139,7 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
             while true do
                 local key = string.format("mapObjectsHider.hiddenObjects.object(%d)", index)
                 if hasXMLProperty(xmlFile, key) then
+                    ---@type HideObject
                     local object = {}
                     object.name = getXMLString(xmlFile, key .. "#name") or ""
                     object.index = getXMLString(xmlFile, key .. "#index") or ""
@@ -147,6 +155,7 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                         end
                         if newHash == object.hash then
                             self:hideNode(object.id)
+                            ---@type HideObjectCollision[]
                             object.collisions = {}
                             local cIndex = 0
                             while true do
@@ -187,6 +196,7 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
     end
 end
 
+---@param streamId integer
 function MapObjectsHider:onWriteStream(streamId)
     local objectsCount = #self.hiddenObjects
     local collisionsCount = 0
@@ -206,6 +216,7 @@ function MapObjectsHider:onWriteStream(streamId)
     end
 end
 
+---@param streamId integer
 function MapObjectsHider:onReadStream(streamId)
     local objectsCount = streamReadInt32(streamId)
     for i = 1, objectsCount, 1 do
@@ -219,11 +230,8 @@ function MapObjectsHider:onReadStream(streamId)
     end
 end
 
-function MapObjectsHider:onUpdate(dt)
-    --DebugUtility.renderNodeHierarchy(0.01, 0.98, 0.01, I3DUtil.indexToObject(self.mapNode, "10"))
-    --DebugUtility.renderNodeHierarchy(0.01, 0.98, 0.01, self.mapNode, 2)
-end
-
+---@param savegameDirectory string
+---@param savegameIndex integer
 function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
     if g_server ~= nil then
         self = MapObjectsHider
@@ -257,10 +265,14 @@ function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
     end
 end
 
+---@param name string
 function MapObjectsHider:printObjectLoadingError(name)
     g_logManager:warning("[%s] Can't find %s, something may have changed in the map hierarchy, the object will be restored.", self.name, name)
 end
 
+---@param objectId integer
+---@param name string
+---@param hiderPlayerName string
 function MapObjectsHider:hideObject(objectId, name, hiderPlayerName)
     if g_server ~= nil then
         local objectName = name or getName(objectId)
@@ -281,15 +293,22 @@ function MapObjectsHider:hideObject(objectId, name, hiderPlayerName)
     end
 end
 
+---@param nodeId integer
 function MapObjectsHider:hideNode(nodeId)
     setVisibility(nodeId, false)
 end
 
+---@param nodeId integer
 function MapObjectsHider:decollideNode(nodeId)
     setRigidBodyType(nodeId, "NoRigidBody")
 end
 
+---@param objectId integer
+---@param objectName string
+---@param hiderPlayerName string
+---@return HideObject
 function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
+    ---@class HideObject
     local object = {}
     object.index = EntityUtility.nodeToIndex(objectId, self.mapNode)
     object.id = objectId
@@ -299,12 +318,16 @@ function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
     object.time = getDate("%H:%M:%S")
     object.player = hiderPlayerName or g_currentMission.userManager:getUserByUserId(g_currentMission.player.userId):getNickname()
 
+    ---@type HideObjectCollision[]
     object.collisions = {}
     EntityUtility.queryNodeHierarchy(
         objectId,
+        ---@param node integer
+        ---@param name string
         function(node, name)
             local rigidType = getRigidBodyType(node)
             if rigidType ~= "NoRigidBody" then
+                ---@class HideObjectCollision
                 local col = {}
                 col.index = EntityUtility.nodeToIndex(node, self.mapNode)
                 col.name = name
@@ -317,6 +340,8 @@ function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
     return object
 end
 
+---@param object HideObject
+---@return boolean
 function MapObjectsHider:checkHideObject(object)
     if type(object.id) ~= "number" or not entityExists(object.id) then
         return false
@@ -347,7 +372,15 @@ function MapObjectsHider:checkHideObject(object)
     return true
 end
 
+---@param objectId integer
+---@return integer | nil
+---@return string
 function MapObjectsHider:getRealHideObject(objectId)
+    local amo = self.animatedMapObjectCollisions[objectId]
+    if amo ~= nil then
+        return amo.mapObjectsHider.rootNode, getName(amo.mapObjectsHider.rootNode)
+    end
+
     local name = ""
     local id = nil
     EntityUtility.queryNodeParents(
@@ -365,19 +398,26 @@ function MapObjectsHider:getRealHideObject(objectId)
     return id, name
 end
 
+---@param objectId integer
+---@return table
 function MapObjectsHider:getObjectDebugInfo(objectId)
     local debugInfo = {}
+    debugInfo.type = "Object Debug Info"
     debugInfo.id = objectId
-    _, debugInfo.objectClass = EntityUtility.getObjectClass(objectId)
+    debugInfo.objectClassId, debugInfo.objectClass = EntityUtility.getObjectClass(objectId)
     debugInfo.object = g_currentMission:getNodeObject(objectId) or "nil"
     debugInfo.rigidBodyType = getRigidBodyType(objectId)
     debugInfo.index = EntityUtility.nodeToIndex(objectId, self.mapNode)
     debugInfo.name = getName(objectId)
-    debugInfo.material = getMaterial(objectId, 0)
-    debugInfo.materialName = getName(debugInfo.material)
-    debugInfo.geometry = getGeometry(objectId)
     debugInfo.clipDistance = getClipDistance(objectId)
     debugInfo.mask = getObjectMask(objectId)
-    debugInfo.isNonRenderable = getIsNonRenderable(objectId)
+
+    if debugInfo.objectClassId == ClassIds.SHAPE then
+        debugInfo.isNonRenderable = getIsNonRenderable(objectId)
+        debugInfo.geometry = getGeometry(objectId)
+        debugInfo.material = getMaterial(objectId, 0)
+        debugInfo.materialName = getName(debugInfo.material)
+    end
+
     return debugInfo
 end

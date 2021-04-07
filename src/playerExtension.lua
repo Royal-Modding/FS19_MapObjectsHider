@@ -6,6 +6,10 @@
 
 PlayerExtension = {}
 
+---@param superFunc function
+---@param isServer boolean
+---@param isClient boolean
+---@return Player
 function PlayerExtension:new(superFunc, isServer, isClient)
     self = superFunc(nil, isServer, isClient)
     self.inputInformation.registrationList[InputAction.MAP_OBJECT_HIDER_HIDE] = {
@@ -22,6 +26,8 @@ function PlayerExtension:new(superFunc, isServer, isClient)
     return self
 end
 
+---@param superFunc function
+---@param dt number
 function PlayerExtension:update(superFunc, dt)
     superFunc(self, dt)
     if MapObjectsHider.debug and self.debugInfo ~= nil then
@@ -32,6 +38,8 @@ function PlayerExtension:update(superFunc, dt)
     end
 end
 
+---@param superFunc function
+---@param dt number
 function PlayerExtension:updateTick(superFunc, dt)
     superFunc(self, dt)
     if self.isEntered and g_dedicatedServerInfo == nil then
@@ -44,6 +52,8 @@ function PlayerExtension:updateTick(superFunc, dt)
     end
 end
 
+---@param hitObjectId integer
+---@return boolean
 function PlayerExtension:raycastCallback(hitObjectId)
     if hitObjectId ~= self.rootNode then
         if getHasClassId(hitObjectId, ClassIds.SHAPE) then
@@ -57,7 +67,7 @@ function PlayerExtension:raycastCallback(hitObjectId)
                     self.raycastHideObject = {name = getName(getParent(hitObjectId)), objectId = hitObjectId, isSplitShape = true}
                     if MapObjectsHider.debug then
                         -- debug placeable
-                        self.hideObjectDebugInfo = {splitType = g_splitTypeManager:getSplitTypeByIndex(getSplitType(hitObjectId))}
+                        self.hideObjectDebugInfo = {type = "Split Type", splitType = g_splitTypeManager:getSplitTypeByIndex(getSplitType(hitObjectId))}
                     end
                     return false
                 elseif g_currentMission:getNodeObject(hitObjectId) == nil then
@@ -79,7 +89,7 @@ function PlayerExtension:raycastCallback(hitObjectId)
                             self.raycastHideObject = {name = storeItem.name, object = object, isSellable = true}
                             if MapObjectsHider.debug then
                                 -- debug placeable
-                                self.hideObjectDebugInfo = {storeItem = storeItem}
+                                self.hideObjectDebugInfo = {type = "Placeable", storeItem = storeItem}
                             end
                             return false
                         end
@@ -91,6 +101,7 @@ function PlayerExtension:raycastCallback(hitObjectId)
     return true -- continue raycast
 end
 
+---@param superFunc function
 function PlayerExtension:updateActionEvents(superFunc)
     superFunc(self)
     if self.raycastHideObject ~= nil then
@@ -136,6 +147,7 @@ function PlayerExtension:hideObjectActionEvent()
     end
 end
 
+---@param yes boolean
 function PlayerExtension:hideObjectDialogCallback(yes)
     if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.id ~= nil then
         MapObjectsHider:hideObject(self.raycastHideObjectBackup.id)
@@ -143,12 +155,14 @@ function PlayerExtension:hideObjectDialogCallback(yes)
     end
 end
 
+---@param yes boolean
 function PlayerExtension:sellObjectDialogCallback(yes)
     if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.object ~= nil then
         g_client:getServerConnection():sendEvent(SellPlaceableEvent:new(self.raycastHideObjectBackup.object))
     end
 end
 
+---@param yes boolean
 function PlayerExtension:deleteSplitShapeDialogCallback(yes)
     if yes and self.raycastHideObjectBackup ~= nil and self.raycastHideObjectBackup.objectId ~= nil then
         g_client:getServerConnection():sendEvent(DeleteSplitShapeEvent:new(self.raycastHideObjectBackup.objectId))
