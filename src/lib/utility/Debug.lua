@@ -1,8 +1,11 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.1.0
+---@version 2.0.5.0
 ---@date 05/01/2021
+
+---@class DebugUtility
+DebugUtility = DebugUtility or {}
 
 --- Render a table (for debugging purpose)
 ---@param posX number
@@ -11,7 +14,7 @@
 ---@param inputTable table
 ---@param maxDepth integer|nil
 ---@param hideFunc boolean|nil
-function Utility.renderTable(posX, posY, textSize, inputTable, maxDepth, hideFunc)
+function DebugUtility.renderTable(posX, posY, textSize, inputTable, maxDepth, hideFunc)
     inputTable = inputTable or {tableIs = "nil"}
     hideFunc = hideFunc or false
     maxDepth = maxDepth or 2
@@ -67,7 +70,7 @@ end
 ---@param textSize number
 ---@param inputNode integer
 ---@param maxDepth integer|nil
-function Utility.renderNodeHierarchy(posX, posY, textSize, inputNode, maxDepth)
+function DebugUtility.renderNodeHierarchy(posX, posY, textSize, inputNode, maxDepth)
     if inputNode == nil or inputNode == 0 then
         return
     end
@@ -79,7 +82,7 @@ function Utility.renderNodeHierarchy(posX, posY, textSize, inputNode, maxDepth)
                 return i
             end
             local offset = i * textSize * 1.05
-            local _, className = Utility.getObjectClass(node)
+            local _, className = EntityUtility.getObjectClass(node)
             renderText(x, posY - offset, textSize, string.format("%s (%s)", getName(node), className))
             i = i + 1
             for ni = 0, getNumOfChildren(node) - 1 do
@@ -92,7 +95,7 @@ function Utility.renderNodeHierarchy(posX, posY, textSize, inputNode, maxDepth)
         setTextColor(1, 1, 1, 1)
         setTextBold(false)
         textSize = getCorrectTextSize(textSize)
-        local _, className = Utility.getObjectClass(inputNode)
+        local _, className = EntityUtility.getObjectClass(inputNode)
         renderText(posX, posY, textSize, string.format("%s (%s)", getName(inputNode), className))
         for ni = 0, getNumOfChildren(inputNode) - 1 do
             i = renderNodeHierarchyRecursively(posX + textSize * 1.8, getChildAt(inputNode, ni), 1, i)
@@ -115,7 +118,7 @@ end
 ---@param ag number g color if active
 ---@param ab number b color if active
 ---@param active boolean active?
-function Utility.drawDebugRectangle(node, minX, maxX, minZ, maxZ, yOffset, alignToGround, r, g, b, ar, ag, ab, active)
+function DebugUtility.drawDebugRectangle(node, minX, maxX, minZ, maxZ, yOffset, alignToGround, r, g, b, ar, ag, ab, active)
     if active then
         r, g, b = ar, ag, ab
     end
@@ -149,7 +152,7 @@ end
 ---@param ag number g color if active
 ---@param ab number b color if active
 ---@param active boolean active?
-function Utility.drawDebugCube(node, size, r, g, b, ar, ag, ab, active)
+function DebugUtility.drawDebugCube(node, size, r, g, b, ar, ag, ab, active)
     if active then
         r, g, b = ar, ag, ab
     end
@@ -174,31 +177,31 @@ function Utility.drawDebugCube(node, size, r, g, b, ar, ag, ab, active)
     corners[7] = {x - offsets, y - offsets, z - offsets}
     corners[8] = {x - offsets, y - offsets, z + offsets}
 
-    Utility.drawDebugLine(corners[1], corners[2], 0, 0, 0)
-    Utility.drawDebugLine(corners[2], corners[3], 0, 0, 0)
-    Utility.drawDebugLine(corners[3], corners[4], 0, 0, 0)
-    Utility.drawDebugLine(corners[4], corners[1], 0, 0, 0)
-    Utility.drawDebugLine(corners[1], corners[5], 0, 0, 0)
-    Utility.drawDebugLine(corners[2], corners[6], 0, 0, 0)
-    Utility.drawDebugLine(corners[3], corners[7], 0, 0, 0)
-    Utility.drawDebugLine(corners[4], corners[8], 0, 0, 0)
-    Utility.drawDebugLine(corners[5], corners[6], 0, 0, 0)
-    Utility.drawDebugLine(corners[6], corners[7], 0, 0, 0)
-    Utility.drawDebugLine(corners[7], corners[8], 0, 0, 0)
-    Utility.drawDebugLine(corners[8], corners[5], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[1], corners[2], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[2], corners[3], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[3], corners[4], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[4], corners[1], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[1], corners[5], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[2], corners[6], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[3], corners[7], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[4], corners[8], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[5], corners[6], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[6], corners[7], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[7], corners[8], 0, 0, 0)
+    DebugUtility.drawDebugLine(corners[8], corners[5], 0, 0, 0)
 
-    Utility.drawDebugTriangle(corners[3], corners[2], corners[1], r, g, b)
-    Utility.drawDebugTriangle(corners[1], corners[4], corners[3], r, g, b)
-    Utility.drawDebugTriangle(corners[4], corners[1], corners[5], r, g, b)
-    Utility.drawDebugTriangle(corners[5], corners[8], corners[4], r, g, b)
-    Utility.drawDebugTriangle(corners[8], corners[5], corners[6], r, g, b)
-    Utility.drawDebugTriangle(corners[6], corners[7], corners[8], r, g, b)
-    Utility.drawDebugTriangle(corners[7], corners[6], corners[2], r, g, b)
-    Utility.drawDebugTriangle(corners[2], corners[3], corners[7], r, g, b)
-    Utility.drawDebugTriangle(corners[2], corners[6], corners[5], r, g, b)
-    Utility.drawDebugTriangle(corners[5], corners[1], corners[2], r, g, b)
-    Utility.drawDebugTriangle(corners[4], corners[8], corners[7], r, g, b)
-    Utility.drawDebugTriangle(corners[7], corners[3], corners[4], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[3], corners[2], corners[1], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[1], corners[4], corners[3], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[4], corners[1], corners[5], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[5], corners[8], corners[4], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[8], corners[5], corners[6], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[6], corners[7], corners[8], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[7], corners[6], corners[2], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[2], corners[3], corners[7], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[2], corners[6], corners[5], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[5], corners[1], corners[2], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[4], corners[8], corners[7], r, g, b)
+    DebugUtility.drawDebugTriangle(corners[7], corners[3], corners[4], r, g, b)
 end
 
 --- Draw a triangle (for debugging purpose)
@@ -208,7 +211,7 @@ end
 ---@param r number r
 ---@param g number g
 ---@param b number b
-function Utility.drawDebugTriangle(c1, c2, c3, r, g, b)
+function DebugUtility.drawDebugTriangle(c1, c2, c3, r, g, b)
     drawDebugTriangle(c1[1], c1[2], c1[3], c2[1], c2[2], c2[3], c3[1], c3[2], c3[3], r, g, b, 1, false)
 end
 
@@ -218,7 +221,7 @@ end
 ---@param r number r
 ---@param g number g
 ---@param b number b
-function Utility.drawDebugLine(p1, p2, r, g, b)
+function DebugUtility.drawDebugLine(p1, p2, r, g, b)
     drawDebugLine(p1[1], p1[2], p1[3], r, g, b, p2[1], p2[2], p2[3], r, g, b)
 end
 
@@ -229,7 +232,7 @@ end
 ---@param h number height
 ---@param curve table AnimCurve object
 ---@param numPointsToShow? integer number of points to render
-function Utility.renderAnimCurve(x, y, w, h, curve, numPointsToShow)
+function DebugUtility.renderAnimCurve(x, y, w, h, curve, numPointsToShow)
     local graph = curve.debugGraph
     local numPoints = numPointsToShow or #curve.keyframes
     local minTime = 0
@@ -261,16 +264,16 @@ end
 
 --- Get the loading speed meter object
 ---@return LoadingSpeedMeter loadingSpeedMeter
-function Utility.getVehicleLoadingSpeedMeter()
-    if Utility.loadingSpeedMeter == nil then
+function DebugUtility.getVehicleLoadingSpeedMeter()
+    if DebugUtility.loadingSpeedMeter == nil then
         ---@class LoadingSpeedMeter
-        Utility.loadingSpeedMeter = {}
-        Utility.loadingSpeedMeter.vehicles = {}
-        Utility.loadingSpeedMeter.filters = {}
+        DebugUtility.loadingSpeedMeter = {}
+        DebugUtility.loadingSpeedMeter.vehicles = {}
+        DebugUtility.loadingSpeedMeter.filters = {}
         --- Add a new filter
         ---@param filterFunction function | 'function(vehicleData) return true, "meter name" end'
-        Utility.loadingSpeedMeter.addFilter = function(filterFunction)
-            table.insert(Utility.loadingSpeedMeter.filters, filterFunction)
+        DebugUtility.loadingSpeedMeter.addFilter = function(filterFunction)
+            table.insert(DebugUtility.loadingSpeedMeter.filters, filterFunction)
         end
         Utility.overwrittenFunction(
             Vehicle,
@@ -278,7 +281,7 @@ function Utility.getVehicleLoadingSpeedMeter()
             function(self, superFunc, vehicleData, asyncCallbackFunction, asyncCallbackObject, asyncCallbackArguments)
                 local smEnabled = false
                 local smName = ""
-                for _, filter in ipairs(Utility.loadingSpeedMeter.filters) do
+                for _, filter in ipairs(DebugUtility.loadingSpeedMeter.filters) do
                     smEnabled, smName = filter(vehicleData)
                     if smEnabled then
                         break
@@ -286,20 +289,20 @@ function Utility.getVehicleLoadingSpeedMeter()
                 end
 
                 if smEnabled then
-                    Utility.loadingSpeedMeter.vehicles[self] = {}
-                    Utility.loadingSpeedMeter.vehicles[self].smName = smName
-                    Utility.loadingSpeedMeter.vehicles[self].totalStartTime = getTimeSec()
+                    DebugUtility.loadingSpeedMeter.vehicles[self] = {}
+                    DebugUtility.loadingSpeedMeter.vehicles[self].smName = smName
+                    DebugUtility.loadingSpeedMeter.vehicles[self].totalStartTime = getTimeSec()
                 end
 
                 local state = superFunc(self, vehicleData, asyncCallbackFunction, asyncCallbackObject, asyncCallbackArguments)
 
                 if smEnabled then
-                    Utility.loadingSpeedMeter.vehicles[self].totalTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[self].totalStartTime
-                    print(string.format("[%s] Pre   time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].preLoadTime or 0) * 1000))
-                    print(string.format("[%s] Load  time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].loadTime or 0) * 1000))
-                    print(string.format("[%s] Post  time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].postLoadTime or 0) * 1000))
-                    print(string.format("[%s] Total time: %.4f ms", Utility.loadingSpeedMeter.vehicles[self].smName, (Utility.loadingSpeedMeter.vehicles[self].totalTime or 0) * 1000))
-                    Utility.loadingSpeedMeter.vehicles[self] = nil
+                    DebugUtility.loadingSpeedMeter.vehicles[self].totalTime = getTimeSec() - DebugUtility.loadingSpeedMeter.vehicles[self].totalStartTime
+                    print(string.format("[%s] Pre   time: %.4f ms", DebugUtility.loadingSpeedMeter.vehicles[self].smName, (DebugUtility.loadingSpeedMeter.vehicles[self].preLoadTime or 0) * 1000))
+                    print(string.format("[%s] Load  time: %.4f ms", DebugUtility.loadingSpeedMeter.vehicles[self].smName, (DebugUtility.loadingSpeedMeter.vehicles[self].loadTime or 0) * 1000))
+                    print(string.format("[%s] Post  time: %.4f ms", DebugUtility.loadingSpeedMeter.vehicles[self].smName, (DebugUtility.loadingSpeedMeter.vehicles[self].postLoadTime or 0) * 1000))
+                    print(string.format("[%s] Total time: %.4f ms", DebugUtility.loadingSpeedMeter.vehicles[self].smName, (DebugUtility.loadingSpeedMeter.vehicles[self].totalTime or 0) * 1000))
+                    DebugUtility.loadingSpeedMeter.vehicles[self] = nil
                 end
                 return state
             end
@@ -308,21 +311,21 @@ function Utility.getVehicleLoadingSpeedMeter()
             SpecializationUtil,
             "raiseEvent",
             function(superFunc, vehicle, eventName, ...)
-                if Utility.loadingSpeedMeter.vehicles[vehicle] ~= nil then
+                if DebugUtility.loadingSpeedMeter.vehicles[vehicle] ~= nil then
                     if eventName == "onPreLoad" then
-                        Utility.loadingSpeedMeter.vehicles[vehicle].preLoadStartTime = getTimeSec()
+                        DebugUtility.loadingSpeedMeter.vehicles[vehicle].preLoadStartTime = getTimeSec()
                         superFunc(vehicle, eventName, ...)
-                        Utility.loadingSpeedMeter.vehicles[vehicle].preLoadTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[vehicle].preLoadStartTime
+                        DebugUtility.loadingSpeedMeter.vehicles[vehicle].preLoadTime = getTimeSec() - DebugUtility.loadingSpeedMeter.vehicles[vehicle].preLoadStartTime
                     end
                     if eventName == "onLoad" then
-                        Utility.loadingSpeedMeter.vehicles[vehicle].loadStartTime = getTimeSec()
+                        DebugUtility.loadingSpeedMeter.vehicles[vehicle].loadStartTime = getTimeSec()
                         superFunc(vehicle, eventName, ...)
-                        Utility.loadingSpeedMeter.vehicles[vehicle].loadTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[vehicle].loadStartTime
+                        DebugUtility.loadingSpeedMeter.vehicles[vehicle].loadTime = getTimeSec() - DebugUtility.loadingSpeedMeter.vehicles[vehicle].loadStartTime
                     end
                     if eventName == "onPostLoad" then
-                        Utility.loadingSpeedMeter.vehicles[vehicle].postLoadStartTime = getTimeSec()
+                        DebugUtility.loadingSpeedMeter.vehicles[vehicle].postLoadStartTime = getTimeSec()
                         superFunc(vehicle, eventName, ...)
-                        Utility.loadingSpeedMeter.vehicles[vehicle].postLoadTime = getTimeSec() - Utility.loadingSpeedMeter.vehicles[vehicle].postLoadStartTime
+                        DebugUtility.loadingSpeedMeter.vehicles[vehicle].postLoadTime = getTimeSec() - DebugUtility.loadingSpeedMeter.vehicles[vehicle].postLoadStartTime
                     end
                 else
                     superFunc(vehicle, eventName, ...)
@@ -330,5 +333,5 @@ function Utility.getVehicleLoadingSpeedMeter()
             end
         )
     end
-    return Utility.loadingSpeedMeter
+    return DebugUtility.loadingSpeedMeter
 end

@@ -25,10 +25,10 @@ end
 function PlayerExtension:update(superFunc, dt)
     superFunc(self, dt)
     if MapObjectsHider.debug and self.debugInfo ~= nil then
-        Utility.renderTable(0.1, 0.95, 0.01, self.debugInfo, 3, false)
+        DebugUtility.renderTable(0.1, 0.95, 0.01, self.debugInfo, 3, false)
     end
     if MapObjectsHider.debug and self.hideObjectDebugInfo ~= nil then
-        Utility.renderTable(0.2, 0.95, 0.01, self.hideObjectDebugInfo, 3, false)
+        DebugUtility.renderTable(0.2, 0.95, 0.01, self.hideObjectDebugInfo, 3, false)
     end
 end
 

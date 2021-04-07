@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.1.0
+---@version 2.0.5.0
 ---@date 05/01/2021
 
 --- Table utilities class
@@ -37,7 +37,7 @@ function TableUtility.overwrite(t, newTable)
     end
 end
 
---- Get if a the element exists
+--- Get if an element with the given value exists
 ---@param t table
 ---@param value any
 ---@return boolean
@@ -48,6 +48,18 @@ function TableUtility.contains(t, value)
         end
     end
     return false
+end
+
+--- Map a table to a new table
+---@param t table source table
+---@param func function | "function(e) return { f1 = e.f1, f2 = e.f2 } end" mapping function
+---@return table mapped mapped table
+function TableUtility.map(t, func)
+    local mapped = {}
+    for k, v in pairs(t) do
+        mapped[k] = func(v)
+    end
+    return mapped
 end
 
 --- Get if a matching element exists

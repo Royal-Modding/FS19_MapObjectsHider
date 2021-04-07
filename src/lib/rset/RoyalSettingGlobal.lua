@@ -1,7 +1,7 @@
 --- Royal Settings
 
 ---@author Royal Modding
----@version 1.3.0.0
+---@version 1.4.0.0
 ---@date 13/01/2021
 
 ---@class RoyalSettingGlobal : RoyalSetting

@@ -1,13 +1,13 @@
 --- Royal Settings
 
 ---@author Royal Modding
----@version 1.3.0.0
+---@version 1.4.0.0
 ---@date 12/01/2021
 
 ---@class RoyalSettings
 RoyalSettings = {}
 ---@type integer
-RoyalSettings.revision = 4
+RoyalSettings.revision = 5
 ---@type string
 RoyalSettings.loadingModName = g_currentModName
 ---@type string
@@ -31,9 +31,33 @@ RoyalSettings.OWNERS.ALL = 1
 ---@type integer
 RoyalSettings.OWNERS.USER = 2
 
-function RoyalSettings:initialize()
+---@param gameEnv any
+function RoyalSettings:initialize(gameEnv)
+    g_logManager:devInfo("Initializing Royal Settings from %s", self.loadingModName)
+
     self.registrationEnabled = true
     self.guiDirectory = self.libDirectory .. "gui/"
+
+    self.g_i18n = g_i18n
+
+    self.dummyModDescDirectory = Utils.getFilename("dummyModDesc.xml", g_royalSettings.libDirectory)
+
+    local dummyModDesc = loadXMLFile("dummyModDesc", self.dummyModDescDirectory)
+    local i = 0
+    while true do
+        local baseName = string.format("modDesc.l10n.text(%d)", i)
+        local name = getXMLString(dummyModDesc, baseName .. "#name")
+        if name == nil then
+            break
+        end
+        local text = getXMLString(dummyModDesc, baseName .. "." .. g_languageShort)
+        if text == nil then
+            text = getXMLString(dummyModDesc, baseName .. ".en")
+        end
+        self.g_i18n:setText(name, text)
+        i = i + 1
+    end
+    delete(dummyModDesc)
 
     -- loading other scripts here to prevent useless loading from multiple instances of the library
     source(Utils.getFilename("RoyalSetting.lua", self.libDirectory))
@@ -55,9 +79,47 @@ function RoyalSettings:initialize()
 
     Utility.prependedFunction(Mission00, "loadMission00Finished", self.onLoad)
     Utility.appendedFunction(FSBaseMission, "saveSavegame", self.onSaveSavegame)
-    Utility.appendedFunction(BaseMission, "keyEvent", self.onKeyEvent)
 
-    g_logManager:devInfo("Initializing Royal Settings from " .. self.loadingModName)
+    Utility.prependedFunction(g_inputBinding, "loadModActions", self.preLoadModActionsAndBindings)
+    Utility.appendedFunction(g_inputBinding, "loadModActions", self.postLoadModActionsAndBindings)
+    Utility.prependedFunction(g_inputBinding, "loadModBindingDefaults", self.preLoadModActionsAndBindings)
+    Utility.appendedFunction(g_inputBinding, "loadModBindingDefaults", self.postLoadModActionsAndBindings)
+
+    Utility.appendedFunction(gameEnv, "registerGlobalActionEvents", self.registerGlobalActionEvents)
+
+    self.modManager_getMods = g_modManager.getMods
+
+    local time = getTimeSec()
+    g_inputBinding:load()
+
+    g_logManager:devInfo("[Royal Settings] InputBinding reloaded in %.1f ms", (getTimeSec() - time) * 1000)
+end
+
+---@param inputManager InputBinding
+function RoyalSettings.registerGlobalActionEvents(inputManager)
+    local eventAdded, eventId = inputManager:registerActionEvent(InputAction.ROYAL_SETTINGS_OPEN, g_royalSettings, g_royalSettings.openGui, false, true, false, true)
+    if eventAdded then
+        inputManager:setActionEventTextVisibility(eventId, false)
+    end
+end
+
+---@param modManager ModManager
+---@return ModEntry[]
+function RoyalSettings.custom_modManager_getMods(modManager)
+    ---@type ModEntry[]
+    local mods = g_royalSettings.modManager_getMods(modManager)
+    ---@type ModEntry
+    local dummyRoyalSettingsMod = {modName = "g_royalSettings", modFile = g_royalSettings.dummyModDescDirectory}
+    table.insert(mods, dummyRoyalSettingsMod)
+    return mods
+end
+
+function RoyalSettings.preLoadModActionsAndBindings(inputBinding)
+    g_modManager.getMods = g_royalSettings.custom_modManager_getMods
+end
+
+function RoyalSettings.postLoadModActionsAndBindings(inputBinding)
+    g_modManager.getMods = g_royalSettings.modManager_getMods
 end
 
 function RoyalSettings:onLoad()
@@ -131,13 +193,6 @@ function RoyalSettings:onSaveSavegame()
     for _, xml in pairs(xmlIds) do
         saveXMLFile(xml)
         delete(xml)
-    end
-end
-
-function RoyalSettings:onKeyEvent(unicode, sym, modifier, isDown)
-    self = g_royalSettings
-    if sym == Input.KEY_r and isDown and bitAND(modifier, Input.MOD_RSHIFT) > 0 then
-        self:openGui()
     end
 end
 
@@ -280,7 +335,7 @@ if game.g_royalSettings == nil then
         end
         g_royalSettings = object
         game.g_royalSettings = object
-        game.g_royalSettings:initialize()
+        game.g_royalSettings:initialize(game)
     end
     Utility.prependedFunction(VehicleTypeManager, "validateVehicleTypes", game.g_royalSettings.bootstrap)
 end

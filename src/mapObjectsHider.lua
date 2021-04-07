@@ -109,17 +109,8 @@ function MapObjectsHider:deleteSplitShapeConfirmEnabledChanged(value)
     self.deleteSplitShapeConfirmEnabled = value
 end
 
-function MapObjectsHider:onPreLoadMap(mapFile)
-end
-
-function MapObjectsHider:onCreateStartPoint(startPointNode)
-end
-
 function MapObjectsHider:onLoadMap(mapNode, mapFile)
     self.mapNode = mapNode
-end
-
-function MapObjectsHider:onPostLoadMap(mapNode, mapFile)
 end
 
 function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
@@ -148,9 +139,9 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                     object.date = getXMLString(xmlFile, key .. "#date") or ""
                     object.time = getXMLString(xmlFile, key .. "#time") or ""
                     object.player = getXMLString(xmlFile, key .. "#player") or ""
-                    object.id = Utility.indexToNode(object.index, self.mapNode)
+                    object.id = EntityUtility.indexToNode(object.index, self.mapNode)
                     if object.id ~= nil then
-                        local newHash = Utility.getNodeHierarchyHash(object.id, self.mapNode, self.md5)
+                        local newHash = EntityUtility.getNodeHierarchyHash(object.id, self.mapNode, self.md5)
                         if savegameUpdate then
                             object.hash = newHash
                         end
@@ -165,7 +156,7 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                                     collision.name = getXMLString(xmlFile, cKey .. "#name") or ""
                                     collision.index = getXMLString(xmlFile, cKey .. "#index") or ""
                                     collision.rigidBodyType = getXMLString(xmlFile, cKey .. "#rigidBodyType") or "NoRigidBody"
-                                    collision.id = Utility.indexToNode(collision.index, self.mapNode)
+                                    collision.id = EntityUtility.indexToNode(collision.index, self.mapNode)
                                     if collision.id ~= nil and getRigidBodyType(collision.id) == collision.rigidBodyType then
                                         self:decollideNode(collision.id)
                                         table.insert(object.collisions, collision)
@@ -196,24 +187,6 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
     end
 end
 
-function MapObjectsHider:onPreLoadVehicles(xmlFile, resetVehicles)
-end
-
-function MapObjectsHider:onPreLoadItems(xmlFile)
-end
-
-function MapObjectsHider:onPreLoadOnCreateLoadedObjects(xmlFile)
-end
-
-function MapObjectsHider:onLoadFinished()
-end
-
-function MapObjectsHider:onStartMission()
-end
-
-function MapObjectsHider:onMissionStarted()
-end
-
 function MapObjectsHider:onWriteStream(streamId)
     local objectsCount = #self.hiddenObjects
     local collisionsCount = 0
@@ -237,39 +210,18 @@ function MapObjectsHider:onReadStream(streamId)
     local objectsCount = streamReadInt32(streamId)
     for i = 1, objectsCount, 1 do
         local objIndex = streamReadString(streamId)
-        self:hideNode(Utility.indexToNode(objIndex, self.mapNode))
+        self:hideNode(EntityUtility.indexToNode(objIndex, self.mapNode))
     end
     local collisionsCount = streamReadInt32(streamId)
     for i = 1, collisionsCount, 1 do
         local colIndex = streamReadString(streamId)
-        self:decollideNode(Utility.indexToNode(colIndex, self.mapNode))
+        self:decollideNode(EntityUtility.indexToNode(colIndex, self.mapNode))
     end
 end
 
 function MapObjectsHider:onUpdate(dt)
-    --Utility.renderNodeHierarchy(0.01, 0.98, 0.01, I3DUtil.indexToObject(self.mapNode, "10"))
-    --Utility.renderNodeHierarchy(0.01, 0.98, 0.01, self.mapNode, 2)
-end
-
-function MapObjectsHider:onUpdateTick(dt)
-end
-
-function MapObjectsHider:onWriteUpdateStream(streamId, connection, dirtyMask)
-end
-
-function MapObjectsHider:onReadUpdateStream(streamId, timestamp, connection)
-end
-
-function MapObjectsHider:onMouseEvent(posX, posY, isDown, isUp, button)
-end
-
-function MapObjectsHider:onKeyEvent(unicode, sym, modifier, isDown)
-end
-
-function MapObjectsHider:onDraw()
-end
-
-function MapObjectsHider:onPreSaveSavegame(savegameDirectory, savegameIndex)
+    --DebugUtility.renderNodeHierarchy(0.01, 0.98, 0.01, I3DUtil.indexToObject(self.mapNode, "10"))
+    --DebugUtility.renderNodeHierarchy(0.01, 0.98, 0.01, self.mapNode, 2)
 end
 
 function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
@@ -303,12 +255,6 @@ function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
         saveXMLFile(xmlFile)
         delete(xmlFile)
     end
-end
-
-function MapObjectsHider:onPreDeleteMap()
-end
-
-function MapObjectsHider:onDeleteMap()
 end
 
 function MapObjectsHider:printObjectLoadingError(name)
@@ -345,22 +291,22 @@ end
 
 function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
     local object = {}
-    object.index = Utility.nodeToIndex(objectId, self.mapNode)
+    object.index = EntityUtility.nodeToIndex(objectId, self.mapNode)
     object.id = objectId
-    object.hash = Utility.getNodeHierarchyHash(objectId, self.mapNode, self.md5)
+    object.hash = EntityUtility.getNodeHierarchyHash(objectId, self.mapNode, self.md5)
     object.name = objectName
     object.date = getDate("%d/%m/%Y")
     object.time = getDate("%H:%M:%S")
     object.player = hiderPlayerName or g_currentMission.userManager:getUserByUserId(g_currentMission.player.userId):getNickname()
 
     object.collisions = {}
-    Utility.queryNodeHierarchy(
+    EntityUtility.queryNodeHierarchy(
         objectId,
         function(node, name)
             local rigidType = getRigidBodyType(node)
             if rigidType ~= "NoRigidBody" then
                 local col = {}
-                col.index = Utility.nodeToIndex(node, self.mapNode)
+                col.index = EntityUtility.nodeToIndex(node, self.mapNode)
                 col.name = name
                 col.id = node
                 col.rigidBodyType = rigidType
@@ -376,7 +322,7 @@ function MapObjectsHider:checkHideObject(object)
         return false
     end
 
-    if object.hash ~= Utility.getNodeHierarchyHash(object.id, self.mapNode, self.md5) then
+    if object.hash ~= EntityUtility.getNodeHierarchyHash(object.id, self.mapNode, self.md5) then
         return false
     end
 
@@ -404,7 +350,7 @@ end
 function MapObjectsHider:getRealHideObject(objectId)
     local name = ""
     local id = nil
-    Utility.queryNodeParents(
+    EntityUtility.queryNodeParents(
         objectId,
         function(node, nodeName)
             -- do some extra checks to ensure that's the real object
@@ -422,10 +368,10 @@ end
 function MapObjectsHider:getObjectDebugInfo(objectId)
     local debugInfo = {}
     debugInfo.id = objectId
-    _, debugInfo.objectClass = Utility.getObjectClass(objectId)
+    _, debugInfo.objectClass = EntityUtility.getObjectClass(objectId)
     debugInfo.object = g_currentMission:getNodeObject(objectId) or "nil"
     debugInfo.rigidBodyType = getRigidBodyType(objectId)
-    debugInfo.index = Utility.nodeToIndex(objectId, self.mapNode)
+    debugInfo.index = EntityUtility.nodeToIndex(objectId, self.mapNode)
     debugInfo.name = getName(objectId)
     debugInfo.material = getMaterial(objectId, 0)
     debugInfo.materialName = getName(debugInfo.material)

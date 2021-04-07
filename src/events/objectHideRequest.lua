@@ -32,12 +32,12 @@ end
 
 function ObjectHideRequestEvent:run(connection)
     if g_server ~= nil then
-        MapObjectsHider:hideObject(Utility.indexToNode(self.objectIndex, MapObjectsHider.mapNode), nil, g_currentMission.userManager:getUserByConnection(connection):getNickname())
+        MapObjectsHider:hideObject(EntityUtility.indexToNode(self.objectIndex, MapObjectsHider.mapNode), nil, g_currentMission.userManager:getUserByConnection(connection):getNickname())
     end
 end
 
 function ObjectHideRequestEvent.sendToServer(objectId)
     if g_server == nil then
-        g_client:getServerConnection():sendEvent(ObjectHideRequestEvent:new(Utility.nodeToIndex(objectId, MapObjectsHider.mapNode)))
+        g_client:getServerConnection():sendEvent(ObjectHideRequestEvent:new(EntityUtility.nodeToIndex(objectId, MapObjectsHider.mapNode)))
     end
 end

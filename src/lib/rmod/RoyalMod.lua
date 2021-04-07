@@ -1,33 +1,64 @@
 --- Royal Mod
 
 ---@author Royal Modding
----@version 1.4.0.0
+---@version 1.5.0.0
 ---@date 03/12/2020
 
 ---@class RoyalMod
----@field directory string mod directory
----@field userProfileDirectory string user profile directory
----@field name string mod name
----@field mod table g_modManager mod object
----@field version string mod version
----@field author string mod author
----@field modEnv table mod scripting environment
----@field gameEnv table game scripting environment
----@field super table mod super class
----@field debug boolean mod debug state
+---@field onWriteStream fun(self: RoyalMod, streamId: integer)
+---@field onReadStream fun(self: RoyalMod, streamId: integer)
+---@field onUpdateTick fun(self: RoyalMod, dt: number)
+---@field onWriteUpdateStream fun(self: RoyalMod, streamId: integer, connection: Connection, dirtyMask: integer)
+---@field onReadUpdateStream fun(self: RoyalMod, streamId: integer, timestamp: number, connection: Connection)
+---@field onLoadMap fun(self: RoyalMod, mapNode: integer, mapFile: string)
+---@field onDeleteMap fun(self: RoyalMod)
+---@field onDraw fun(self: RoyalMod)
+---@field onUpdate fun(self: RoyalMod, dt: number)
+---@field onMouseEvent fun(self: RoyalMod, posX: number, posY: number, isDown: boolean, isUp: boolean, button: integer)
+---@field onKeyEvent fun(self: RoyalMod, unicode: integer, sym: integer, modifier: integer, isDown: boolean)
+---@field initialize fun(self: RoyalMod)
+---@field onValidateVehicleTypes fun(self: RoyalMod, vtm: VehicleTypeManager, addSpecialization: fun(specName: string), addSpecializationBySpecialization: fun(specName: string, requiredSpecName: string), addSpecializationByVehicleType: fun(specName: string, requiredVehicleTypeName: string), addSpecializationByFunction: fun(specName: string, func: function))
+---@field onMissionInitialize fun(self: RoyalMod, baseDirectory: string, missionCollaborators: MissionCollaborators)
+---@field onSetMissionInfo fun(self: RoyalMod, missionInfo: MissionInfo, missionDynamicInfo: table)
+---@field onLoad fun(self: RoyalMod)
+---@field onPreLoadMap fun(self: RoyalMod, mapFile: string)
+---@field onCreateStartPoint fun(self: RoyalMod, startPointNode: integer)
+---@field onPostLoadMap fun(self: RoyalMod, mapNode: integer, mapFile: string)
+---@field onLoadSavegame fun(self: RoyalMod, savegameDirectory: string, savegameIndex: integer)
+---@field onPreLoadVehicles fun(self: RoyalMod, xmlFile: integer, resetVehicles: boolean)
+---@field onPreLoadItems fun(self: RoyalMod, xmlFile: integer)
+---@field onPreLoadOnCreateLoadedObjects fun(self: RoyalMod, xmlFile: integer)
+---@field onLoadFinished fun(self: RoyalMod)
+---@field onStartMission fun(self: RoyalMod)
+---@field onMissionStarted fun(self: RoyalMod)
+---@field onPreDeleteMap fun(self: RoyalMod)
+---@field onPreSaveSavegame fun(self: RoyalMod, savegameDirectory: string, savegameIndex: integer)
+---@field onPostSaveSavegame fun(self: RoyalMod, savegameDirectory: string, savegameIndex: integer)
+---@field onLoadHelpLine fun(self: RoyalMod): string
+--@field directory string mod directory
+--@field userProfileDirectory string user profile directory
+--@field name string mod name
+--@field mod table g_modManager mod object
+--@field version string mod version
+--@field author string mod author
+--@field modEnv table mod scripting environment
+--@field gameEnv table game scripting environment
+--@field super table mod super class
+--@field debug boolean mod debug state
 RoyalMod = {}
 
 ---@param debug boolean defines if debug is enabled
 ---@param mpSync boolean defines if mp sync is enabled
 ---@return RoyalMod
 function RoyalMod.new(debug, mpSync)
+    ---@type RoyalMod
     local mod = {}
     mod.directory = g_currentModDirectory
     mod.userProfileDirectory = getUserProfileAppPath()
     mod.name = g_currentModName
-    mod.mod = g_modManager:getModByName(mod.name)
-    mod.version = mod.mod.version
-    mod.author = mod.mod.author
+    mod.modManagerMod = g_modManager:getModByName(mod.name)
+    mod.version = mod.modManagerMod.version
+    mod.author = mod.modManagerMod.author
     mod.modEnv = getfenv()
     mod.gameEnv = getfenv(0)
     mod.super = {}
@@ -35,11 +66,13 @@ function RoyalMod.new(debug, mpSync)
 
     if mod.debug then
         mod.gameEnv["g_showDevelopmentWarnings"] = true
+        mod.gameEnv["g_addTestCommands"] = true
     --mod.gameEnv["g_isDevelopmentConsoleScriptModTesting"] = true
     end
 
     mod.super.oldFunctions = {}
 
+    ---@param error string
     mod.super.errorHandle = function(error)
         g_logManager:devError("RoyalMod caught error from %s (%s)", mod.name, mod.version)
         g_logManager:error(error)
@@ -61,6 +94,8 @@ function RoyalMod.new(debug, mpSync)
     if mpSync then
         mod.super.sync = Object:new(g_server ~= nil, g_client ~= nil, Class(nil, Object))
 
+        ---@param self Object
+        ---@param streamId integer
         mod.super.sync.writeStream = function(self, streamId)
             self:superClass().writeStream(self, streamId)
             if mod.onWriteStream ~= nil then
@@ -72,6 +107,8 @@ function RoyalMod.new(debug, mpSync)
             end
         end
 
+        ---@param self Object
+        ---@param streamId integer
         mod.super.sync.readStream = function(self, streamId)
             self:superClass().readStream(self, streamId)
             if mod.onReadStream ~= nil then
@@ -83,6 +120,8 @@ function RoyalMod.new(debug, mpSync)
             end
         end
 
+        ---@param self Object
+        ---@param dt number
         mod.super.sync.updateTick = function(self, dt)
             self:superClass().updateTick(self, dt)
             if mod.onUpdateTick ~= nil then
@@ -90,6 +129,10 @@ function RoyalMod.new(debug, mpSync)
             end
         end
 
+        ---@param self Object
+        ---@param streamId integer
+        ---@param connection Connection
+        ---@param dirtyMask integer
         mod.super.sync.writeUpdateStream = function(self, streamId, connection, dirtyMask)
             self:superClass().writeUpdateStream(self, streamId, connection, dirtyMask)
             if mod.onWriteUpdateStream ~= nil then
@@ -97,6 +140,10 @@ function RoyalMod.new(debug, mpSync)
             end
         end
 
+        ---@param self Object
+        ---@param streamId integer
+        ---@param timestamp number
+        ---@param connection Connection
         mod.super.sync.readUpdateStream = function(self, streamId, timestamp, connection)
             self:superClass().readUpdateStream(self, streamId, timestamp, connection)
             if mod.onReadUpdateStream ~= nil then
@@ -105,36 +152,53 @@ function RoyalMod.new(debug, mpSync)
         end
     end
 
+    ---@param _ table
+    ---@param mapFile string
     mod.super.loadMap = function(_, mapFile)
         if mod.onLoadMap ~= nil then
             xpcall(mod.onLoadMap, mod.super.errorHandle, mod, mod.mapNode, mapFile)
         end
     end
 
+    ---@param _ table
     mod.super.deleteMap = function(_)
         if mod.onDeleteMap ~= nil then
             xpcall(mod.onDeleteMap, mod.super.errorHandle, mod)
         end
     end
 
+    ---@param _ table
     mod.super.draw = function(_)
         if mod.onDraw ~= nil then
             xpcall(mod.onDraw, mod.super.errorHandle, mod)
         end
     end
 
+    ---@param _ table
+    ---@param dt number
     mod.super.update = function(_, dt)
         if mod.onUpdate ~= nil then
             xpcall(mod.onUpdate, mod.super.errorHandle, mod, dt)
         end
     end
 
+    ---@param _ table
+    ---@param posX number
+    ---@param posY number
+    ---@param isDown boolean
+    ---@param isUp boolean
+    ---@param button integer
     mod.super.mouseEvent = function(_, posX, posY, isDown, isUp, button)
         if mod.onMouseEvent ~= nil then
             xpcall(mod.onMouseEvent, mod.super.errorHandle, mod, posX, posY, isDown, isUp, button)
         end
     end
 
+    ---@param _ table
+    ---@param unicode integer
+    ---@param sym integer
+    ---@param modifier integer
+    ---@param isDown boolean
     mod.super.keyEvent = function(_, unicode, sym, modifier, isDown)
         if mod.onKeyEvent ~= nil then
             xpcall(mod.onKeyEvent, mod.super.errorHandle, mod, unicode, sym, modifier, isDown)
@@ -143,6 +207,14 @@ function RoyalMod.new(debug, mpSync)
 
     mod.super.oldFunctions.VehicleTypeManagervalidateVehicleTypes = VehicleTypeManager.validateVehicleTypes
     VehicleTypeManager.validateVehicleTypes = function(self, ...)
+        ---@type table<string, string>
+        local global = mod.gameEnv["g_i18n"].texts
+        ---@type string
+        for key, text in pairs(g_i18n.texts) do
+            if global[key] == nil then
+                global[key] = text
+            end
+        end
         if mod.initialize ~= nil then
             --- g_currentMission is still nil here
             --- All mods are loaded here
@@ -167,6 +239,7 @@ function RoyalMod.new(debug, mpSync)
                 mod.super.errorHandle,
                 mod,
                 self,
+                ---@param specName string
                 function(specName)
                     if not specAddAllowed then
                         g_logManager:devError("[%s] addSpecialization is no more allowed", mod.name)
@@ -174,6 +247,8 @@ function RoyalMod.new(debug, mpSync)
                     end
                     table.insert(specs, {name = string.format("%s.%s", mod.name, specName), addedTo = {}})
                 end,
+                ---@param specName string
+                ---@param requiredSpecName string
                 function(specName, requiredSpecName)
                     if not specAddAllowed then
                         g_logManager:devError("[%s] addSpecializationBySpecialization is no more allowed", mod.name)
@@ -181,6 +256,8 @@ function RoyalMod.new(debug, mpSync)
                     end
                     table.insert(specsBySpec, {name = string.format("%s.%s", mod.name, specName), requiredSpecName = requiredSpecName, addedTo = {}})
                 end,
+                ---@param specName string
+                ---@param requiredVehicleTypeName string
                 function(specName, requiredVehicleTypeName)
                     if not specAddAllowed then
                         g_logManager:devError("[%s] addSpecializationByVehicleType is no more allowed", mod.name)
@@ -188,6 +265,8 @@ function RoyalMod.new(debug, mpSync)
                     end
                     table.insert(specsByType, {name = string.format("%s.%s", mod.name, specName), requiredVehicleTypeName = requiredVehicleTypeName, addedTo = {}})
                 end,
+                ---@param specName string
+                ---@param func function
                 function(specName, func)
                     if not specAddAllowed then
                         g_logManager:devError("[%s] addSpecializationByFunction is no more allowed", mod.name)
@@ -201,6 +280,7 @@ function RoyalMod.new(debug, mpSync)
         specAddAllowed = false
 
         -- remove invalid specs
+
         for i, spec in pairs(specs) do
             if g_specializationManager:getSpecializationByName(spec.name) == nil then
                 g_logManager:devError("[%s] Can't find specialization %s", mod.name, spec.name)
@@ -327,13 +407,12 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00new = Mission00.new
+    ---@param self Mission00
+    ---@param baseDirectory string
+    ---@param customMt? table
+    ---@param missionCollaborators MissionCollaborators
+    ---@return Mission00
     Mission00.new = function(self, baseDirectory, customMt, missionCollaborators, ...)
-        local global = mod.gameEnv["g_i18n"].texts
-        for key, text in pairs(g_i18n.texts) do
-            if global[key] == nil then
-                global[key] = text
-            end
-        end
         if mod.onMissionInitialize ~= nil then
             --- g_currentMission is still nil here
             xpcall(mod.onMissionInitialize, mod.super.errorHandle, mod, baseDirectory, missionCollaborators)
@@ -342,6 +421,9 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00setMissionInfo = Mission00.setMissionInfo
+    ---@param self Mission00
+    ---@param missionInfo FSCareerMissionInfo
+    ---@param missionDynamicInfo table
     Mission00.setMissionInfo = function(self, missionInfo, missionDynamicInfo, ...)
         g_currentMission:addLoadFinishedListener(mod.super)
         g_currentMission:registerObjectToCallOnMissionStart(mod.super)
@@ -353,6 +435,7 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00load = Mission00.load
+    ---@param self Mission00
     Mission00.load = function(self, ...)
         if mod.onLoad ~= nil then
             xpcall(mod.onLoad, mod.super.errorHandle, mod)
@@ -361,6 +444,12 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.FSBaseMissionloadMap = FSBaseMission.loadMap
+    ---@param self FSBaseMission
+    ---@param mapFile string
+    ---@param addPhysics boolean
+    ---@param asyncCallbackFunction function
+    ---@param asyncCallbackObject table
+    ---@param asyncCallbackArguments table
     FSBaseMission.loadMap = function(self, mapFile, addPhysics, asyncCallbackFunction, asyncCallbackObject, asyncCallbackArguments, ...)
         if mod.onPreLoadMap ~= nil then
             xpcall(mod.onPreLoadMap, mod.super.errorHandle, mod, mapFile)
@@ -369,6 +458,8 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00onCreateStartPoint = Mission00.onCreateStartPoint
+    ---@param self Mission00
+    ---@param startPointNode integer
     Mission00.onCreateStartPoint = function(self, startPointNode, ...)
         mod.super.oldFunctions.Mission00onCreateStartPoint(self, startPointNode, ...)
         if mod.super.sync ~= nil then
@@ -381,6 +472,10 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.BaseMissionloadMapFinished = BaseMission.loadMapFinished
+    ---@param self BaseMission
+    ---@param mapNode integer
+    ---@param arguments table
+    ---@param callAsyncCallback boolean
     BaseMission.loadMapFinished = function(self, mapNode, arguments, callAsyncCallback, ...)
         mod.mapNode = mapNode
         local mapFile, _, _, _ = unpack(arguments)
@@ -391,6 +486,9 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00loadMission00Finished = Mission00.loadMission00Finished
+    ---@param self Mission00
+    ---@param mapNode integer
+    ---@param arguments table
     Mission00.loadMission00Finished = function(self, mapNode, arguments, ...)
         if mod.onLoadSavegame ~= nil then
             xpcall(mod.onLoadSavegame, mod.super.errorHandle, mod, mod.super.getSavegameDirectory(), g_currentMission.missionInfo.savegameIndex)
@@ -399,6 +497,9 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00loadVehicles = Mission00.loadVehicles
+    ---@param self Mission00
+    ---@param xmlFile integer
+    ---@param resetVehicles boolean
     Mission00.loadVehicles = function(self, xmlFile, resetVehicles, ...)
         if mod.onPreLoadVehicles ~= nil then
             xpcall(mod.onPreLoadVehicles, mod.super.errorHandle, mod, xmlFile, resetVehicles)
@@ -407,6 +508,8 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00loadItems = Mission00.loadItems
+    ---@param self Mission00
+    ---@param xmlFile integer
     Mission00.loadItems = function(self, xmlFile, ...)
         if mod.onPreLoadItems ~= nil then
             xpcall(mod.onPreLoadItems, mod.super.errorHandle, mod, xmlFile)
@@ -415,6 +518,8 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00loadOnCreateLoadedObjects = Mission00.loadOnCreateLoadedObjects
+    ---@param self Mission00
+    ---@param xmlFile integer
     Mission00.loadOnCreateLoadedObjects = function(self, xmlFile, ...)
         if mod.onPreLoadOnCreateLoadedObjects ~= nil then
             xpcall(mod.onPreLoadOnCreateLoadedObjects, mod.super.errorHandle, mod, xmlFile)
@@ -430,6 +535,7 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00onStartMission = Mission00.onStartMission
+    ---@param self Mission00
     Mission00.onStartMission = function(self, ...)
         if mod.onStartMission ~= nil then
             xpcall(mod.onStartMission, mod.super.errorHandle, mod)
@@ -444,6 +550,7 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.Mission00delete = Mission00.delete
+    ---@param self Mission00
     Mission00.delete = function(self, ...)
         if mod.onPreDeleteMap ~= nil then
             xpcall(mod.onPreDeleteMap, mod.super.errorHandle, mod)
@@ -452,6 +559,7 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.FSBaseMissionsaveSavegame = FSBaseMission.saveSavegame
+    ---@param self FSBaseMission
     FSBaseMission.saveSavegame = function(self, ...)
         if mod.onPreSaveSavegame ~= nil then
             -- before all vhicles, items and onCreateObjects are saved
@@ -465,6 +573,10 @@ function RoyalMod.new(debug, mpSync)
     end
 
     mod.super.oldFunctions.HelpLineManagerloadMapData = HelpLineManager.loadMapData
+    ---@param self HelpLineManager
+    ---@param xmlFile integer
+    ---@param missionInfo FSCareerMissionInfo
+    ---@return boolean
     HelpLineManager.loadMapData = function(self, xmlFile, missionInfo)
         if mod.super.oldFunctions.HelpLineManagerloadMapData(self, xmlFile, missionInfo) then
             if mod.onLoadHelpLine ~= nil then

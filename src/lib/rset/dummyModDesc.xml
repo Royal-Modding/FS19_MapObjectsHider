@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<modDesc>
+	<actions>
+		<action name="ROYAL_SETTINGS_OPEN" category="SYSTEM" axisType="HALF" />
+	</actions>
+
+	<inputBinding>
+		<actionBinding action="ROYAL_SETTINGS_OPEN">
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_rshift KEY_r" />
+		</actionBinding>
+	</inputBinding>
+
+	<l10n>
+		<text name="input_ROYAL_SETTINGS_OPEN">
+			<en>Open settings panel</en>
+			<de>Einstellungsfeld öffnen</de>
+			<it>Apri panello delle impostazioni</it>
+			<es>Abrir panel de configuración</es>
+			<fr>Ouvrir le panneau des paramètres</fr>
+			<pt>Painel de ajustes abertos</pt>
+			<br>Painel de ajustes abertos</br>
+		</text>
+	</l10n>
+</modDesc>

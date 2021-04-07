@@ -1,7 +1,7 @@
 --- Royal Settings
 
 ---@author Royal Modding
----@version 1.3.0.0
+---@version 1.4.0.0
 ---@date 18/01/2021
 
 SettingsGui = {}
@@ -11,7 +11,7 @@ local SettingsGui_mt = Class(SettingsGui, TabbedMenu)
 SettingsGui.CONTROLS = {}
 
 function SettingsGui:new()
-    local o = TabbedMenu:new(nil, SettingsGui_mt, g_messageCenter, g_i18n, g_gui.inputManager)
+    local o = TabbedMenu:new(nil, SettingsGui_mt, g_messageCenter, g_i18n, g_inputBinding)
     o.returnScreenName = ""
     SettingsGui.CONTROLS = g_royalSettings.guis.pagesIds
     o:registerControls(SettingsGui.CONTROLS)

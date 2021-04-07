@@ -1,14 +1,17 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.1.0
+---@version 2.0.5.0
 ---@date 05/01/2021
+
+---@class GameplayUtility
+GameplayUtility = GameplayUtility or {}
 
 --- Get value of a trunk (splitshape)
 ---@param id integer
 ---@param splitType table
 ---@return number, number, number, number
-function Utility.getTrunkValue(id, splitType)
+function GameplayUtility.getTrunkValue(id, splitType)
     if splitType == nil then
         splitType = g_splitTypeManager:getSplitTypeByIndex(getSplitType(id))
     end
@@ -50,13 +53,15 @@ function Utility.getTrunkValue(id, splitType)
 
     defoliageScale = MathUtil.lerp(1, defoliageScale, g_currentMission.missionInfo.economicDifficulty / 3)
 
-    return volume * 1000 * splitType.pricePerLiter * qualityScale * defoliageScale * lengthScale, qualityScale, defoliageScale, lengthScale
+    local sellPriceMultiplier = g_currentMission.missionInfo.sellPriceMultiplier
+
+    return volume * 1000 * splitType.pricePerLiter * qualityScale * defoliageScale * lengthScale * sellPriceMultiplier, qualityScale, defoliageScale, lengthScale
 end
 
 --- Get the farm color
 ---@param farmId number
 ---@return number[]
-function Utility.getFarmColor(farmId)
+function GameplayUtility.getFarmColor(farmId)
     local farm = g_farmManager:getFarmById(farmId)
     if farm ~= nil then
         local color = Farm.COLORS[farm.color]
@@ -70,7 +75,7 @@ end
 --- Get the farm name
 ---@param farmId number
 ---@return string
-function Utility.getFarmName(farmId)
+function GameplayUtility.getFarmName(farmId)
     local farm = g_farmManager:getFarmById(farmId)
     if farm ~= nil then
         return farm.name

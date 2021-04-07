@@ -36,9 +36,9 @@ end
 function HideDecollideNodeEvent:run(connection)
     if g_server == nil then
         if self.hide then
-            MapObjectsHider:hideNode(Utility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
+            MapObjectsHider:hideNode(EntityUtility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
         else
-            MapObjectsHider:decollideNode(Utility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
+            MapObjectsHider:decollideNode(EntityUtility.indexToNode(self.objectIndex, MapObjectsHider.mapNode))
         end
     end
 end

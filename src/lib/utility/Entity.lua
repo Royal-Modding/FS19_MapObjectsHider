@@ -1,14 +1,17 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.8.1.0
+---@version 2.0.5.0
 ---@date 05/01/2021
+
+---@class EntityUtility
+EntityUtility = EntityUtility or {}
 
 --- Get the class id and name of an onject
 ---@param objectId integer
 ---@return integer classId class id
 ---@return string className class name
-function Utility.getObjectClass(objectId)
+function EntityUtility.getObjectClass(objectId)
     if objectId == nil then
         return nil, nil
     end
@@ -23,7 +26,7 @@ end
 ---@param childNode integer
 ---@param parentNode integer
 ---@return boolean
-function Utility.isChildOf(childNode, parentNode)
+function EntityUtility.isChildOf(childNode, parentNode)
     if childNode == nil or childNode == 0 or parentNode == nil or parentNode == 0 then
         return false
     end
@@ -41,9 +44,9 @@ end
 ---@param nodeId integer id of node
 ---@param rootId integer id of root node
 ---@return string nodeIndex index of node
-function Utility.nodeToIndex(nodeId, rootId)
+function EntityUtility.nodeToIndex(nodeId, rootId)
     local index = ""
-    if nodeId ~= nil and entityExists(nodeId) and rootId ~= nil and entityExists(rootId) and Utility.isChildOf(nodeId, rootId) then
+    if nodeId ~= nil and entityExists(nodeId) and rootId ~= nil and entityExists(rootId) and EntityUtility.isChildOf(nodeId, rootId) then
         index = tostring(getChildIndex(nodeId))
         local pNode = getParent(nodeId)
         while pNode ~= rootId and pNode ~= 0 do
@@ -58,7 +61,7 @@ end
 ---@param nodeIndex string index of node
 ---@param rootId integer id of root node
 ---@return integer nodeId id of node
-function Utility.indexToNode(nodeIndex, rootId)
+function EntityUtility.indexToNode(nodeIndex, rootId)
     if nodeIndex == nil or rootId == nil or not entityExists(rootId) then
         return nil
     end
@@ -82,7 +85,7 @@ end
 --- Queries a node hierarchy
 ---@param inputNode integer
 ---@param func function | "function(node, name, depth) end"
-function Utility.queryNodeHierarchy(inputNode, func)
+function EntityUtility.queryNodeHierarchy(inputNode, func)
     if not type(inputNode) == "number" or not entityExists(inputNode) or func == nil then
         return
     end
@@ -104,7 +107,7 @@ end
 ---@param parent integer
 ---@param md5 boolean
 ---@return string hash hash of the node hierarchy
-function Utility.getNodeHierarchyHash(node, parent, md5)
+function EntityUtility.getNodeHierarchyHash(node, parent, md5)
     if not type(node) == "number" or not entityExists(node) or not type(parent) == "number" or not entityExists(parent) then
         return string.format("Invalid hash node:%s parent:%s", node, parent)
     end
@@ -125,7 +128,7 @@ function Utility.getNodeHierarchyHash(node, parent, md5)
 
     local isDyna = false
 
-    Utility.queryNodeHierarchy(
+    EntityUtility.queryNodeHierarchy(
         node,
         function(n, name)
             local rbt = getRigidBodyType(n)
@@ -139,7 +142,7 @@ function Utility.getNodeHierarchyHash(node, parent, md5)
                 rot = floatsToString(getWorldRotation(n))
             end
             local sca = floatsToString(getScale(n))
-            local index = Utility.nodeToIndex(node, parent)
+            local index = EntityUtility.nodeToIndex(node, parent)
             local vis = getVisibility(n)
             hash = string.format("%s>->%s->%s->%s->%s->%s->%s->%s", hash, name, pos, rot, sca, index, rbt, vis)
             nodeCount = nodeCount + 1
@@ -155,7 +158,7 @@ end
 --- Queries node parents (return false to break the loop)
 ---@param inputNode integer
 ---@param func function | "function(node, name, depth) return true end"
-function Utility.queryNodeParents(inputNode, func)
+function EntityUtility.queryNodeParents(inputNode, func)
     if not type(inputNode) == "number" or not entityExists(inputNode) or func == nil then
         return
     end
