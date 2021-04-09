@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <texts>
+        <text name="input_MAP_OBJECT_HIDER_HIDE"                text = "Nascondi oggetto della mappa" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Apri il pannello Map Objects Hider" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Visualizza lista oggetti nascosti" />
+        <text name="moh_gui_title"                              text = "Oggetti nascosti" />
+        <text name="moh_gui_loading_text"                       text = "Caricamento oggetti nascosti..." />
+        <text name="moh_gui_no_objects_text"                    text = "Nessun oggetto è stato nascosto fino ad ora" />
+        <text name="moh_gui_button_restore"                     text = "Ripristina" />
+        <text name="moh_HIDE"                                   text = "Nascondi (%s)" />
+        <text name="moh_SELL"                                   text = "Vendi (%s)" />
+        <text name="moh_DELETE"                                 text = "Cancella (%s)" />
+        <text name="moh_dialog_text"                            text = "Sei sicuro di voler nascondere %s?" />
+        <text name="moh_sell_dialog_text"                       text = "Sei sicuro di voler vendere %s?" />
+        <text name="moh_delete_split_shape_dialog_text"         text = "Sei sicuro di voler rimuovere questo albero/tronco?" />
+        <text name="moh_dialog_title"                           text = "Map Objects Hider" />
+        <text name="moh_mod_settings_title"                     text = "Map Objects Hider" />
+        <text name="moh_hide_confirm_enabled"                   text = "Messaggio di conferma nascondi oggetti" />
+        <text name="moh_hide_confirm_enabled_tooltip"           text = "Mostrare una conferma prima di nascondere un oggetto (altamente consigliato lasciarlo abilitato)" />
+        <text name="moh_sell_confirm_enabled"                   text = "Messaggio di conferma posizionabili" />
+        <text name="moh_sell_confirm_enabled_tooltip"           text = "Mostrare una conferma prima di vendere un posizionabile" />
+        <text name="moh_split_shapes_confirm_enabled"           text = "Messaggio di conferma Alberi e tronchi" />
+        <text name="moh_split_shapes_confirm_enabled_tooltip"   text = "Mostrare una conferma prima di rimuovere alberi e tronchi" />
+    </texts>
+</l10n>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <texts>
+        <text name="input_MAP_OBJECT_HIDER_HIDE"                text = "Ausblenden eines Kartenobjekts" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Open the Map Objects Hider panel" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Show hidden objects list" />
+        <text name="moh_gui_title"                              text = "Hidden objects" />
+        <text name="moh_gui_loading_text"                       text = "Loading hidden objects..." />
+        <text name="moh_gui_no_objects_text"                    text = "No objects have been hidden until now" />
+        <text name="moh_gui_button_restore"                     text = "Restore" />
+        <text name="moh_HIDE"                                   text = "Ausblenden (%s)" />
+        <text name="moh_SELL"                                   text = "Verkaufen (%s)" />
+        <text name="moh_DELETE"                                 text = "Löschen (%s)" />
+        <text name="moh_dialog_text"                            text = "Sind Sie sicher, dass Sie %s ausblenden möchten?" />
+        <text name="moh_sell_dialog_text"                       text = "Sind Sie sicher, dass Sie %s verkaufen möchten?" />
+        <text name="moh_delete_split_shape_dialog_text"         text = "Möchten Sie diesen Baum / dieses Protokoll wirklich entfernen?" />
+        <text name="moh_dialog_title"                           text = "Map Objects Hider" />
+        <text name="moh_mod_settings_title"                     text = "Map Objects Hider" />
+        <text name="moh_hide_confirm_enabled"                   text = "Objekte bestätigen Dialog" />
+        <text name="moh_hide_confirm_enabled_tooltip"           text = "Ob vor dem Ausblenden eines Objekts ein Bestätigungsdialog angezeigt werden soll (es wird dringend empfohlen, ihn aktiviert zu lassen)" />
+        <text name="moh_sell_confirm_enabled"                   text = "Platzierungen bestätigen Dialog" />
+        <text name="moh_sell_confirm_enabled_tooltip"           text = "Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird" />
+        <text name="moh_split_shapes_confirm_enabled"           text = "Bäume bestätigen Dialog" />
+        <text name="moh_split_shapes_confirm_enabled_tooltip"   text = "Gibt an, ob ein Bestätigungsdialogfeld angezeigt werden soll, bevor Bäume und Protokolle entfernt werden" />
+    </texts>
+</l10n>
