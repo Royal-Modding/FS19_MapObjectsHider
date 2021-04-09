@@ -5,7 +5,7 @@
 ---@date 02/12/2020
 
 HideDecollideNodeEvent = {}
-HideDecollideNodeEvent_mt = Class(HideDecollideNodeEvent, Event)
+local HideDecollideNodeEvent_mt = Class(HideDecollideNodeEvent, Event)
 
 InitEventClass(HideDecollideNodeEvent, "HideDecollideNodeEvent")
 
@@ -15,7 +15,7 @@ function HideDecollideNodeEvent:emptyNew()
     return o
 end
 
----@param objectIndex integer
+---@param objectIndex string
 ---@param hide boolean
 ---@return table
 function HideDecollideNodeEvent:new(objectIndex, hide)
@@ -50,7 +50,7 @@ function HideDecollideNodeEvent:run(connection)
     end
 end
 
----@param objectIndex integer
+---@param objectIndex string
 ---@param hide boolean
 function HideDecollideNodeEvent.sendToClients(objectIndex, hide)
     if g_server ~= nil then

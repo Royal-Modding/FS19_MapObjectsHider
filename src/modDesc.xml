@@ -68,15 +68,23 @@ Faites attention :
 		<sourceFile filename="events/objectHideRequest.lua" />
 		<sourceFile filename="events/hideDecollideNode.lua" />
 		<sourceFile filename="events/deleteSplitShapeEvent.lua" />
+		<sourceFile filename="events/requestObjectsListEvent.lua" />
+		<sourceFile filename="events/sendObjectsListEvent.lua" />
+		<sourceFile filename="events/objectShowRequestEvent.lua" />
+		<sourceFile filename="events/showCollideNodeEvent.lua" />
 	</extraSourceFiles>
 
 	<actions>
 		<action name="MAP_OBJECT_HIDER_HIDE" axisType="HALF" />
+		<action name="MAP_OBJECT_HIDER_GUI" axisType="HALF" />
 	</actions>
 
 	<inputBinding>
 		<actionBinding action="MAP_OBJECT_HIDER_HIDE">
 			<binding device="KB_MOUSE_DEFAULT" input="KEY_h" />
+		</actionBinding>
+		<actionBinding action="MAP_OBJECT_HIDER_GUI">
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_lshift KEY_h" />
 		</actionBinding>
 	</inputBinding>
 
@@ -88,6 +96,24 @@ Faites attention :
 			<es>Ocultar un objeto del mapa</es>
 			<pl>Ukrywanie obiektów na mapie</pl>
 			<ru>Скрыть объект</ru>
+		</text>
+		<text name="input_MAP_OBJECT_HIDER_GUI">
+			<en>Open the Map Objects Hider panel</en>
+		</text>
+		<text name="moh_MAP_OBJECT_HIDER_GUI">
+			<en>Show hidden objects list</en>
+		</text>
+		<text name="moh_gui_title">
+			<en>Hidden objects</en>
+		</text>
+		<text name="moh_gui_loading_text">
+			<en>Loading hidden objects...</en>
+		</text>
+		<text name="moh_gui_no_objects_text">
+			<en>No objects have been hidden until now</en>
+		</text>
+		<text name="moh_gui_button_restore">
+			<en>Restore</en>
 		</text>
 		<text name="moh_HIDE">
 			<en>Hide (%s)</en>

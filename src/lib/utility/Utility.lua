@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.5.0
+---@version 2.1.0.0
 ---@date 09/11/2020
 
 ---@class RandomInterval
@@ -122,4 +122,30 @@ end
 ---@param newFunc function
 function Utility.prependedFunction(target, name, newFunc)
     target[name] = Utils.prependedFunction(target[name], newFunc)
+end
+
+--- Get elapsed seconds between given date and FS19 release date
+---@param year? integer
+---@param month? integer
+---@param day? integer
+---@param hour? integer
+---@param minute? integer
+---@param second? integer
+---@return integer
+function Utility.getTimestampAt(year, month, day, hour, minute, second)
+    year = year or 0
+    month = month or 0
+    day = day or 0
+    hour = hour or 0
+    minute = minute or 0
+    second = second or 0
+    return getDateDiffSeconds(year, month, day, hour, minute, second, 2018, 11, 20, 0, 0, 0)
+end
+
+--- Get elapsed seconds since FS19 release date
+---@return integer
+function Utility.getTimestamp()
+    local date = getDate("%Y-%m-%d_%H-%M-%S")
+    local year, month, day, hour, minute, second = date:match("(%d%d%d%d)-(%d%d)-(%d%d)_(%d%d)-(%d%d)-(%d%d)")
+    return Utility.getTimestampAt(tonumber(year), tonumber(month), tonumber(day), tonumber(hour), tonumber(minute), tonumber(second))
 end

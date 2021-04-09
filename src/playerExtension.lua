@@ -23,6 +23,17 @@ function PlayerExtension:new(superFunc, isServer, isClient)
         text = g_i18n:getText("moh_HIDE"),
         textVisibility = true
     }
+    self.inputInformation.registrationList[InputAction.MAP_OBJECT_HIDER_GUI] = {
+        eventId = "",
+        callback = self.showHiddenObjectsListActionEvent,
+        triggerUp = false,
+        triggerDown = true,
+        triggerAlways = false,
+        activeType = Player.INPUT_ACTIVE_TYPE.STARTS_ENABLED,
+        callbackState = nil,
+        text = g_i18n:getText("moh_MAP_OBJECT_HIDER_GUI"),
+        textVisibility = true
+    }
     return self
 end
 
@@ -145,6 +156,10 @@ function PlayerExtension:hideObjectActionEvent()
             end
         end
     end
+end
+
+function PlayerExtension:showHiddenObjectsListActionEvent()
+    MapObjectsHider:openGui()
 end
 
 ---@param yes boolean

@@ -41,8 +41,7 @@
       "command": "fsmt",
       "args": [
         "-sync",
-        "-c",
-        "-s"
+        "-c"
       ],
       "options": {
         "cwd": "${workspaceRoot}/"

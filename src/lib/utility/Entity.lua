@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.5.0
+---@version 2.1.0.0
 ---@date 05/01/2021
 
 ---@class EntityUtility
@@ -84,7 +84,7 @@ end
 
 --- Queries a node hierarchy
 ---@param inputNode integer
----@param func function | "function(node, name, depth) end"
+---@param func fun(node: integer, name: string, depth: integer)
 function EntityUtility.queryNodeHierarchy(inputNode, func)
     if not type(inputNode) == "number" or not entityExists(inputNode) or func == nil then
         return

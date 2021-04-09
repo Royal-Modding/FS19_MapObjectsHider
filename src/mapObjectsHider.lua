@@ -38,17 +38,44 @@ function MapObjectsHider:initialize()
     if Player.raycastCallback == nil then
         Player.raycastCallback = PlayerExtension.raycastCallback
     end
+
     if Player.hideObjectActionEvent == nil then
         Player.hideObjectActionEvent = PlayerExtension.hideObjectActionEvent
     end
+
     if Player.hideObjectDialogCallback == nil then
         Player.hideObjectDialogCallback = PlayerExtension.hideObjectDialogCallback
     end
+
     if Player.sellObjectDialogCallback == nil then
         Player.sellObjectDialogCallback = PlayerExtension.sellObjectDialogCallback
     end
+
     if Player.deleteSplitShapeDialogCallback == nil then
         Player.deleteSplitShapeDialogCallback = PlayerExtension.deleteSplitShapeDialogCallback
+    end
+
+    if Player.showHiddenObjectsListActionEvent == nil then
+        Player.showHiddenObjectsListActionEvent = PlayerExtension.showHiddenObjectsListActionEvent
+    end
+
+    self.guiDirectory = Utils.getFilename("gui/", self.directory)
+    source(Utils.getFilename("mohGui.lua", self.guiDirectory))
+    g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
+    self.gui = g_gui:loadGui(self.guiDirectory .. "mohGui.xml", "MapObjectsHiderGui", MOHGui:new())
+
+    if self.debug then
+        addConsoleCommand("mohReloadGui", "", "consoleCommandReloadGui", self)
+    end
+end
+
+function MapObjectsHider:consoleCommandReloadGui()
+    if g_gui.currentGuiName ~= nil and g_gui.currentGuiName ~= "" then
+        g_gui:showGui("")
+        --g_i18n:load()
+        g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
+        self.gui = g_gui:loadGui(self.guiDirectory .. "mohGui.xml", "MapObjectsHiderGui", MOHGui:new())
+        g_gui:showGui(self.gui.name)
     end
 end
 
@@ -147,6 +174,7 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
                     object.date = getXMLString(xmlFile, key .. "#date") or ""
                     object.time = getXMLString(xmlFile, key .. "#time") or ""
                     object.player = getXMLString(xmlFile, key .. "#player") or ""
+                    object.timestamp = getXMLInt(xmlFile, key .. "#timestamp") or self.getTimestampFromDateAndTime(object.date, object.time)
                     object.id = EntityUtility.indexToNode(object.index, self.mapNode)
                     if object.id ~= nil then
                         local newHash = EntityUtility.getNodeHierarchyHash(object.id, self.mapNode, self.md5)
@@ -194,6 +222,24 @@ function MapObjectsHider:onLoadSavegame(savegameDirectory, savegameIndex)
             delete(xmlFile)
         end
     end
+end
+
+---@param date string
+---@param time string
+---@return integer
+function MapObjectsHider.getTimestampFromDateAndTime(date, time)
+    ---@return integer
+    local function parse()
+        local day, month, year = date:match("(%d%d)/(%d%d)/(%d%d%d%d)")
+        local hour, minute, second = time:match("(%d%d):(%d%d):(%d%d)")
+        return Utility.getTimestampAt(tonumber(year), tonumber(month), tonumber(day), tonumber(hour), tonumber(minute), tonumber(second))
+    end
+    local succes, result = pcall(parse, date, time)
+    printf("New timestamp loaded = %s", result)
+    if succes then
+        return result
+    end
+    return 0
 end
 
 ---@param streamId integer
@@ -248,6 +294,7 @@ function MapObjectsHider:onPostSaveSavegame(savegameDirectory, savegameIndex)
             setXMLString(xmlFile, key .. "#date", object.date)
             setXMLString(xmlFile, key .. "#time", object.time)
             setXMLString(xmlFile, key .. "#player", object.player)
+            setXMLInt(xmlFile, key .. "#timestamp", object.timestamp)
 
             local cIndex = 0
             for _, collision in pairs(object.collisions) do
@@ -293,6 +340,32 @@ function MapObjectsHider:hideObject(objectId, name, hiderPlayerName)
     end
 end
 
+---@param objectIndex string
+function MapObjectsHider:showObject(objectIndex)
+    if g_server ~= nil then
+        ArrayUtility.remove(
+            self.hiddenObjects,
+            ---@param hiddenObjects HideObject[]
+            ---@param index integer
+            ---@return boolean
+            function(hiddenObjects, index)
+                local hiddenObject = hiddenObjects[index]
+                if hiddenObject.index == objectIndex then
+                    -- inviare evento di ripristino
+                    self:showNode(hiddenObject.id)
+                    ShowCollideNodeEvent.sendToClients(true, hiddenObject.index)
+                    for _, col in pairs(hiddenObject.collisions) do
+                        self:collideNode(col.id, col.rigidBodyType)
+                        ShowCollideNodeEvent.sendToClients(false, col.index, col.rigidBodyType)
+                    end
+                    return true
+                end
+                return false
+            end
+        )
+    end
+end
+
 ---@param nodeId integer
 function MapObjectsHider:hideNode(nodeId)
     setVisibility(nodeId, false)
@@ -301,6 +374,17 @@ end
 ---@param nodeId integer
 function MapObjectsHider:decollideNode(nodeId)
     setRigidBodyType(nodeId, "NoRigidBody")
+end
+
+---@param nodeId integer
+function MapObjectsHider:showNode(nodeId)
+    setVisibility(nodeId, true)
+end
+
+---@param nodeId integer
+---@param rigidBodyType string
+function MapObjectsHider:collideNode(nodeId, rigidBodyType)
+    setRigidBodyType(nodeId, rigidBodyType)
 end
 
 ---@param objectId integer
@@ -316,6 +400,7 @@ function MapObjectsHider:getHideObject(objectId, objectName, hiderPlayerName)
     object.name = objectName
     object.date = getDate("%d/%m/%Y")
     object.time = getDate("%H:%M:%S")
+    object.timestamp = Utility.getTimestamp()
     object.player = hiderPlayerName or g_currentMission.userManager:getUserByUserId(g_currentMission.player.userId):getNickname()
 
     ---@type HideObjectCollision[]
@@ -420,4 +505,10 @@ function MapObjectsHider:getObjectDebugInfo(objectId)
     end
 
     return debugInfo
+end
+
+function MapObjectsHider:openGui()
+    if not self.gui.target:getIsOpen() then
+        g_gui:showGui(self.gui.name)
+    end
 end

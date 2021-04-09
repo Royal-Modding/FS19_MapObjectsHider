@@ -5,7 +5,7 @@
 ---@date 09/03/2021
 
 DeleteSplitShapeEvent = {}
-DeleteSplitShapeEvent_mt = Class(DeleteSplitShapeEvent, Event)
+local DeleteSplitShapeEvent_mt = Class(DeleteSplitShapeEvent, Event)
 
 InitEventClass(DeleteSplitShapeEvent, "DeleteSplitShapeEvent")
 

@@ -5,7 +5,7 @@
 ---@date 02/12/2020
 
 ObjectHideRequestEvent = {}
-ObjectHideRequestEvent_mt = Class(ObjectHideRequestEvent, Event)
+local ObjectHideRequestEvent_mt = Class(ObjectHideRequestEvent, Event)
 
 InitEventClass(ObjectHideRequestEvent, "ObjectHideRequestEvent")
 
@@ -16,7 +16,7 @@ function ObjectHideRequestEvent:emptyNew()
     return o
 end
 
----@param objectIndex integer
+---@param objectIndex string
 ---@return table
 function ObjectHideRequestEvent:new(objectIndex)
     local o = ObjectHideRequestEvent:emptyNew()
