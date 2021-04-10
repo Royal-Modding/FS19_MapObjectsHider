@@ -2,20 +2,20 @@
 <l10n>
     <texts>
         <text name="input_MAP_OBJECT_HIDER_HIDE"                text = "Ukrywanie obiektów na mapie" />
-        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Open the Map Objects Hider panel" />
-        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Show hidden objects list" />
-        <text name="moh_gui_title"                              text = "Hidden objects" />
-        <text name="moh_gui_loading_text"                       text = "Loading hidden objects..." />
-        <text name="moh_gui_no_objects_text"                    text = "No objects have been hidden until now" />
-        <text name="moh_gui_button_restore"                     text = "Restore" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Otwórz okno zarządzania ukrytymi obiektami" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Pokaż listę ukrytych obiektów" />
+        <text name="moh_gui_title"                              text = "Ukryte obiekty" />
+        <text name="moh_gui_loading_text"                       text = "Ładowanie ukrytych obiektów..." />
+        <text name="moh_gui_no_objects_text"                    text = "Jak dotąd nie ukryto jeszcze żadnych obiektów." />
+        <text name="moh_gui_button_restore"                     text = "Przywróć" />
         <text name="moh_HIDE"                                   text = "Ukryj (%s)" />
         <text name="moh_SELL"                                   text = "Sprzedaj (%s)" />
         <text name="moh_DELETE"                                 text = "Usuń (%s)" />
         <text name="moh_dialog_text"                            text = "Jesteś pewien, że chcesz ukryć %s?" />
         <text name="moh_sell_dialog_text"                       text = "Jesteś pewien, że chcesz sprzedać %s?" />
         <text name="moh_delete_split_shape_dialog_text"         text = "Jesteś pewien, że chcesz usunąć to drzewo/kłodę?" />
-        <text name="moh_dialog_title"                           text = "Map Objects Hider" />
-        <text name="moh_mod_settings_title"                     text = "Map Objects Hider" />
+        <text name="moh_dialog_title"                           text = "Obiekty ukryte na mapie" />
+        <text name="moh_mod_settings_title"                     text = "Obiekty ukryte na mapie" />
         <text name="moh_hide_confirm_enabled"                   text = "Okno potwierdzania obiektów" />
         <text name="moh_hide_confirm_enabled_tooltip"           text = "Czy pokazywać okno dialogowe potwierdzenia przed ukryciem obiektu (zdecydowanie zaleca się pozostawienie go włączonego)" />
         <text name="moh_sell_confirm_enabled"                   text = "Okno potwierdzania obiektów placeable" />
