@@ -2,12 +2,12 @@
 <l10n>
     <texts>
         <text name="input_MAP_OBJECT_HIDER_HIDE"                text = "Masquer un objet sur la carte" />
-        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Open the Map Objects Hider panel" />
-        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Show hidden objects list" />
-        <text name="moh_gui_title"                              text = "Hidden objects" />
-        <text name="moh_gui_loading_text"                       text = "Loading hidden objects..." />
-        <text name="moh_gui_no_objects_text"                    text = "No objects have been hidden until now" />
-        <text name="moh_gui_button_restore"                     text = "Restore" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Ouvrir le menu de masquage des objets" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Afficher la liste des objets masqués" />
+        <text name="moh_gui_title"                              text = "Objets masqués" />
+        <text name="moh_gui_loading_text"                       text = "Chargement des objets masqués..." />
+        <text name="moh_gui_no_objects_text"                    text = "Aucun objet masqué pour le moment" />
+        <text name="moh_gui_button_restore"                     text = "Restaurer" />
         <text name="moh_HIDE"                                   text = "Masquer (%s)" />
         <text name="moh_SELL"                                   text = "Vendre (%s)" />
         <text name="moh_DELETE"                                 text = "Supprimer (%s)" />
