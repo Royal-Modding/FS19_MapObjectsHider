@@ -22,7 +22,7 @@
         <text name="moh_sell_confirm_enabled_tooltip"           text="Czy pokazywać okno dialogowe potwierdzenia przed sprzedaniem obiektu placeable" />
         <text name="moh_split_shapes_confirm_enabled"           text="Okno potwierdzania drzew" />
         <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Czy pokazywać okno dialogowe potwierdzenia przed usunięciem drzew i kłód" />
-        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
-        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
+        <text name="moh_gui_show_help_enabled"                  text="Pokaż w oknie pomocy" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Czy dodać przyciski od listy ukrytych obiektów do okna pomocy" />
     </texts>
 </l10n>
