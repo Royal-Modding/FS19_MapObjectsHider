@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <l10n>
     <texts>
-        <text name="input_MAP_OBJECT_HIDER_HIDE"                text = "Hide a map object" />
-        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Open the Map Objects Hider panel" />
-        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Show hidden objects list" />
-        <text name="moh_gui_title"                              text = "Hidden objects" />
-        <text name="moh_gui_loading_text"                       text = "Loading hidden objects..." />
-        <text name="moh_gui_no_objects_text"                    text = "No objects have been hidden until now" />
-        <text name="moh_gui_button_restore"                     text = "Restore" />
-        <text name="moh_HIDE"                                   text = "Hide (%s)" />
-        <text name="moh_SELL"                                   text = "Sell (%s)" />
-        <text name="moh_DELETE"                                 text = "Delete (%s)" />
-        <text name="moh_dialog_text"                            text = "Are you sure you want to hide %s?" />
-        <text name="moh_sell_dialog_text"                       text = "Are you sure you want to sell %s?" />
-        <text name="moh_delete_split_shape_dialog_text"         text = "Are you sure you want to remove this tree/log?" />
-        <text name="moh_dialog_title"                           text = "Map Objects Hider" />
-        <text name="moh_mod_settings_title"                     text = "Map Objects Hider" />
-        <text name="moh_hide_confirm_enabled"                   text = "Objects confirm dialog" />
-        <text name="moh_hide_confirm_enabled_tooltip"           text = "Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)" />
-        <text name="moh_sell_confirm_enabled"                   text = "Placeable confirm dialog" />
-        <text name="moh_sell_confirm_enabled_tooltip"           text = "Whether to show a confirmation dialog before selling a placeable" />
-        <text name="moh_split_shapes_confirm_enabled"           text = "Trees confirm dialog" />
-        <text name="moh_split_shapes_confirm_enabled_tooltip"   text = "Whether to show a confirmation dialog before removing trees and logs" />
+        <text name="input_MAP_OBJECT_HIDER_HIDE"                text="Hide a map object" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text="Open the Map Objects Hider panel" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text="Show hidden objects list" />
+        <text name="moh_gui_title"                              text="Hidden objects" />
+        <text name="moh_gui_loading_text"                       text="Loading hidden objects..." />
+        <text name="moh_gui_no_objects_text"                    text="No objects have been hidden until now" />
+        <text name="moh_gui_button_restore"                     text="Restore" />
+        <text name="moh_HIDE"                                   text="Hide (%s)" />
+        <text name="moh_SELL"                                   text="Sell (%s)" />
+        <text name="moh_DELETE"                                 text="Delete (%s)" />
+        <text name="moh_dialog_text"                            text="Are you sure you want to hide %s?" />
+        <text name="moh_sell_dialog_text"                       text="Are you sure you want to sell %s?" />
+        <text name="moh_delete_split_shape_dialog_text"         text="Are you sure you want to remove this tree/log?" />
+        <text name="moh_dialog_title"                           text="Map Objects Hider" />
+        <text name="moh_mod_settings_title"                     text="Map Objects Hider" />
+        <text name="moh_hide_confirm_enabled"                   text="Objects confirm dialog" />
+        <text name="moh_hide_confirm_enabled_tooltip"           text="Whether to show a confirmation dialog before hiding an object (Highly suggested to leave it enabled)" />
+        <text name="moh_sell_confirm_enabled"                   text="Placeable confirm dialog" />
+        <text name="moh_sell_confirm_enabled_tooltip"           text="Whether to show a confirmation dialog before selling a placeable" />
+        <text name="moh_split_shapes_confirm_enabled"           text="Trees confirm dialog" />
+        <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Whether to show a confirmation dialog before removing trees and logs" />
+        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
     </texts>
 </l10n>

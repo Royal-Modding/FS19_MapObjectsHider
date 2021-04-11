@@ -9,7 +9,7 @@
 
         <GuiElement type="empty" profile="mohIngameMenuSettingsBox">
             <GuiElement type="empty" profile="mohListBox">
-                <GuiElement type="list" profile="mohList" position="1px -1px" id="mohList">
+                <GuiElement type="list" profile="mohList" onSelectionChanged="onSelectionChanged" id="mohList">
                     <GuiElement type="listItem" profile="mohListItem" id="mohListItemTemplate">
                         <GuiElement type="text" profile="mohObjectNameText" text="Name of the object" />
                         <GuiElement type="text" profile="mohDateText" text="08/04/2021 15:43:29" />
@@ -28,6 +28,9 @@
                 <GuiElement type="bitmap" profile="mohListEmptyBox" visible="false" id="mohNOHBox">
                     <GuiElement type="text" profile="mohListEmptyBoxText" text="$l10n_moh_gui_no_objects_text" />
                 </GuiElement>
+            </GuiElement>
+            <GuiElement type="empty" profile="mohCameraBox">
+                <GuiElement type="camera" profile="mohCamera" id="mohCamera" />
             </GuiElement>
         </GuiElement>
     </GuiElement>

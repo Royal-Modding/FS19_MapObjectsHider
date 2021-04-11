@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <l10n>
     <texts>
-        <text name="input_MAP_OBJECT_HIDER_HIDE"                text = "Masquer un objet sur la carte" />
-        <text name="input_MAP_OBJECT_HIDER_GUI"                 text = "Ouvrir le menu de masquage des objets" />
-        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text = "Afficher la liste des objets masqués" />
-        <text name="moh_gui_title"                              text = "Objets masqués" />
-        <text name="moh_gui_loading_text"                       text = "Chargement des objets masqués..." />
-        <text name="moh_gui_no_objects_text"                    text = "Aucun objet masqué pour le moment" />
-        <text name="moh_gui_button_restore"                     text = "Restaurer" />
-        <text name="moh_HIDE"                                   text = "Masquer (%s)" />
-        <text name="moh_SELL"                                   text = "Vendre (%s)" />
-        <text name="moh_DELETE"                                 text = "Supprimer (%s)" />
-        <text name="moh_dialog_text"                            text = "Etes-vous sûr de vouloir masquer %s ?" />
-        <text name="moh_sell_dialog_text"                       text = "Etes-vous sûr de vouloir vendre %s ?" />
-        <text name="moh_delete_split_shape_dialog_text"         text = "Etes-vous sûr de vouloir supprimer cet arbre ?" />
-        <text name="moh_dialog_title"                           text = "Map Objects Hider" />
-        <text name="moh_mod_settings_title"                     text = "Map Objects Hider" />
-        <text name="moh_hide_confirm_enabled"                   text = "Message de confirmation lors du masquage" />
-        <text name="moh_hide_confirm_enabled_tooltip"           text = "Utilisation d'une confirmation lors du masquage (fortement conseillée)" />
-        <text name="moh_sell_confirm_enabled"                   text = "Message de confirmation lors de la vente" />
-        <text name="moh_sell_confirm_enabled_tooltip"           text = "Utilisation d'une confirmation lors de la vente" />
-        <text name="moh_split_shapes_confirm_enabled"           text = "Message de confirmation lors de la suppression d'arbres" />
-        <text name="moh_split_shapes_confirm_enabled_tooltip"   text = "Utilisation d'une confirmation lors de la suppression d'arbres" />
+        <text name="input_MAP_OBJECT_HIDER_HIDE"                text="Masquer un objet sur la carte" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text="Ouvrir le menu de masquage des objets" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text="Afficher la liste des objets masqués" />
+        <text name="moh_gui_title"                              text="Objets masqués" />
+        <text name="moh_gui_loading_text"                       text="Chargement des objets masqués..." />
+        <text name="moh_gui_no_objects_text"                    text="Aucun objet masqué pour le moment" />
+        <text name="moh_gui_button_restore"                     text="Restaurer" />
+        <text name="moh_HIDE"                                   text="Masquer (%s)" />
+        <text name="moh_SELL"                                   text="Vendre (%s)" />
+        <text name="moh_DELETE"                                 text="Supprimer (%s)" />
+        <text name="moh_dialog_text"                            text="Etes-vous sûr de vouloir masquer %s ?" />
+        <text name="moh_sell_dialog_text"                       text="Etes-vous sûr de vouloir vendre %s ?" />
+        <text name="moh_delete_split_shape_dialog_text"         text="Etes-vous sûr de vouloir supprimer cet arbre ?" />
+        <text name="moh_dialog_title"                           text="Map Objects Hider" />
+        <text name="moh_mod_settings_title"                     text="Map Objects Hider" />
+        <text name="moh_hide_confirm_enabled"                   text="Message de confirmation lors du masquage" />
+        <text name="moh_hide_confirm_enabled_tooltip"           text="Utilisation d'une confirmation lors du masquage (fortement conseillée)" />
+        <text name="moh_sell_confirm_enabled"                   text="Message de confirmation lors de la vente" />
+        <text name="moh_sell_confirm_enabled_tooltip"           text="Utilisation d'une confirmation lors de la vente" />
+        <text name="moh_split_shapes_confirm_enabled"           text="Message de confirmation lors de la suppression d'arbres" />
+        <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Utilisation d'une confirmation lors de la suppression d'arbres" />
+        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
     </texts>
 </l10n>

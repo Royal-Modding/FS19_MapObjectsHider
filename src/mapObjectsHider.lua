@@ -18,6 +18,7 @@ MapObjectsHider.md5 = not MapObjectsHider.debug
 MapObjectsHider.hideConfirmEnabled = true
 MapObjectsHider.sellConfirmEnabled = true
 MapObjectsHider.deleteSplitShapeConfirmEnabled = true
+MapObjectsHider.guiShowHelpEnabled = true
 
 function MapObjectsHider:initialize()
     -- remove 'SeasonsAnimalDeathFix' of 'HofBergmann' map because it break this mod by "hardcore overriding" Player.updateTick
@@ -34,6 +35,8 @@ function MapObjectsHider:initialize()
     Utility.overwrittenFunction(Player, "update", PlayerExtension.update)
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
     Utility.overwrittenFunction(Player, "updateActionEvents", PlayerExtension.updateActionEvents)
+
+    Utility.prependedFunction()
 
     if Player.raycastCallback == nil then
         Player.raycastCallback = PlayerExtension.raycastCallback
@@ -60,6 +63,7 @@ function MapObjectsHider:initialize()
     end
 
     self.guiDirectory = Utils.getFilename("gui/", self.directory)
+    source(Utils.getFilename("elements/cameraElement.lua", self.guiDirectory))
     source(Utils.getFilename("mohGui.lua", self.guiDirectory))
     g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
     self.gui = g_gui:loadGui(self.guiDirectory .. "mohGui.xml", "MapObjectsHiderGui", MOHGui:new())
@@ -72,7 +76,6 @@ end
 function MapObjectsHider:consoleCommandReloadGui()
     if g_gui.currentGuiName ~= nil and g_gui.currentGuiName ~= "" then
         g_gui:showGui("")
-        --g_i18n:load()
         g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
         self.gui = g_gui:loadGui(self.guiDirectory .. "mohGui.xml", "MapObjectsHiderGui", MOHGui:new())
         g_gui:showGui(self.gui.name)
@@ -122,6 +125,17 @@ function MapObjectsHider:onLoad()
         "$l10n_moh_split_shapes_confirm_enabled",
         "$l10n_moh_split_shapes_confirm_enabled_tooltip"
     ):addCallback(self.deleteSplitShapeConfirmEnabledChanged, self)
+    g_royalSettings:registerSetting(
+        self.name,
+        "enable_gui_show_help",
+        g_royalSettings.TYPES.GLOBAL,
+        g_royalSettings.OWNERS.USER,
+        2,
+        {false, true},
+        {"$l10n_ui_off", "$l10n_ui_on"},
+        "$l10n_moh_gui_show_help_enabled",
+        "$l10n_moh_gui_show_help_enabled_tooltip"
+    ):addCallback(self.guiShowHelpEnabledChanged, self)
 end
 
 ---@param value boolean
@@ -137,6 +151,11 @@ end
 ---@param value boolean
 function MapObjectsHider:deleteSplitShapeConfirmEnabledChanged(value)
     self.deleteSplitShapeConfirmEnabled = value
+end
+
+---@param value boolean
+function MapObjectsHider:guiShowHelpEnabledChanged(value)
+    self.guiShowHelpEnabled = value
 end
 
 ---@param mapNode integer

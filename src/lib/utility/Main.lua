@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.1.0.0
+---@version 2.1.1.0
 ---@date 21/11/2020
 
 --- Initialize RoyalUtility

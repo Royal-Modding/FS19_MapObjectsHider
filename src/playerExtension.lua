@@ -131,6 +131,8 @@ function PlayerExtension:updateActionEvents(superFunc)
         g_inputBinding:setActionEventActive(id, false)
         g_inputBinding:setActionEventTextVisibility(id, false)
     end
+    local id = self.inputInformation.registrationList[InputAction.MAP_OBJECT_HIDER_GUI].eventId
+    g_inputBinding:setActionEventTextVisibility(id, MapObjectsHider.guiShowHelpEnabled)
 end
 
 function PlayerExtension:hideObjectActionEvent()

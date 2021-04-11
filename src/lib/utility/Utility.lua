@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.1.0.0
+---@version 2.1.1.0
 ---@date 09/11/2020
 
 ---@class RandomInterval
@@ -97,6 +97,14 @@ end
 ---@param name string
 ---@param newFunc function
 function Utility.overwrittenFunction(target, name, newFunc)
+    if target == nil then
+        print("Error: " .. "overwrittenFunction 'target' cannot be nil")
+        printCallstack()
+    end
+    if newFunc == nil then
+        print("Error: " .. "overwrittenFunction 'newFunc' cannot be nil")
+        printCallstack()
+    end
     target[name] = Utils.overwrittenFunction(target[name], newFunc)
 end
 
@@ -104,6 +112,14 @@ end
 ---@param name string
 ---@param newFunc function
 function Utility.overwrittenStaticFunction(target, name, newFunc)
+    if target == nil then
+        print("Error: " .. "overwrittenStaticFunction 'target' cannot be nil")
+        printCallstack()
+    end
+    if newFunc == nil then
+        print("Error: " .. "overwrittenStaticFunction 'newFunc' cannot be nil")
+        printCallstack()
+    end
     local oldFunc = target[name]
     target[name] = function(...)
         return newFunc(oldFunc, ...)
@@ -114,6 +130,14 @@ end
 ---@param name string
 ---@param newFunc function
 function Utility.appendedFunction(target, name, newFunc)
+    if target == nil then
+        print("Error: " .. "appendedFunction 'target' cannot be nil")
+        printCallstack()
+    end
+    if newFunc == nil then
+        print("Error: " .. "appendedFunction 'newFunc' cannot be nil")
+        printCallstack()
+    end
     target[name] = Utils.appendedFunction(target[name], newFunc)
 end
 
@@ -121,9 +145,16 @@ end
 ---@param name string
 ---@param newFunc function
 function Utility.prependedFunction(target, name, newFunc)
+    if target == nil then
+        print("Error: " .. "prependedFunction 'target' cannot be nil")
+        printCallstack()
+    end
+    if newFunc == nil then
+        print("Error: " .. "prependedFunction 'newFunc' cannot be nil")
+        printCallstack()
+    end
     target[name] = Utils.prependedFunction(target[name], newFunc)
 end
-
 --- Get elapsed seconds between given date and FS19 release date
 ---@param year? integer
 ---@param month? integer

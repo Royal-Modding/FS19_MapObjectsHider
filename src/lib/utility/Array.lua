@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.1.0.0
+---@version 2.1.1.0
 ---@date 26/02/2021
 
 ---@alias Array table<integer, any> Table with numeric indexes only, always ordered and sequential

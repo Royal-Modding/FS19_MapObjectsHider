@@ -98,6 +98,7 @@
 
     <Profile name="mohList" extends="list">
         <Value name="size" value="500px 770px" />
+        <Value name="position" value="1px -1px" />
         <Value name="selectOnScroll" value="true" />
         <Value name="screenAlign" value="topLeft" />
         <Value name="positionOrigin" value="topLeft" />
@@ -167,5 +168,19 @@
 
     <Profile name="mohListEmptyBoxText" extends="ingameMenuContractsEmptyText">
         <Value name="textSize" value="22px" />
+    </Profile>
+
+    <Profile name="mohCameraBox" extends="emptyPanel" with="lightFrame">
+        <Value name="size" value="1057px 772px" />
+        <Value name="position" value="-25px -25px" />
+        <Value name="screenAlign" value="topRight" />
+        <Value name="positionOrigin" value="topRight" />
+    </Profile>
+
+    <Profile name="mohCamera">
+        <Value name="size" value="1055px 770px" />
+        <Value name="position" value="-1px -1px" />
+        <Value name="screenAlign" value="topRight" />
+        <Value name="positionOrigin" value="topRight" />
     </Profile>
 </GUIProfiles>
