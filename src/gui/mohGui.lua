@@ -131,7 +131,8 @@ function MOHGui:refreshList()
     self:onSelectionChanged()
 end
 
-function MOHGui:onClickRestore()
+function MOHGui:onClickCancel()
+    local eventUnused = MOHGui:superClass().onClickCancel(self)
     if self.mohList:getSelectedElement() ~= nil then
         self:hideLastHiddenObject()
         local selectedIndex = self.mohList:getSelectedElementIndex()
@@ -139,7 +140,9 @@ function MOHGui:onClickRestore()
         ArrayUtility.removeAt(self.hiddenObjects, selectedIndex)
         ObjectShowRequestEvent.sendToServer(selectedHiddenObject.index)
         self:refreshList()
+        eventUnused = false
     end
+    return eventUnused
 end
 
 function MOHGui:update(dt)

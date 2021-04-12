@@ -37,6 +37,6 @@
 
     <GuiElement type="flowLayout" profile="buttonBoxDocked" screenAlign="bottomLeft" positionOrigin="bottomLeft" position="130px 77px">
         <GuiElement type="button" profile="buttonBack" text="$l10n_button_back" onClick="onClickBack" />
-        <GuiElement type="button" profile="buttonCancel" text="$l10n_moh_gui_button_restore" onClick="onClickRestore" id="mohRestoreButton" />
+        <GuiElement type="button" profile="buttonCancel" text="$l10n_moh_gui_button_restore" onClick="onClickCancel" id="mohRestoreButton" />
     </GuiElement>
 </GUI>
