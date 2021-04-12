@@ -484,6 +484,11 @@ function MapObjectsHider:getRealHideObject(objectId)
         return amo.mapObjectsHider.rootNode, getName(amo.mapObjectsHider.rootNode)
     end
 
+    if getName(getParent(objectId)) == "LOD0" then
+        local rootNode = getParent(getParent(objectId))
+        return rootNode, getName(rootNode)
+    end
+
     local name = ""
     local id = nil
     EntityUtility.queryNodeParents(
