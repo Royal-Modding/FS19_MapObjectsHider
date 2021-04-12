@@ -42,10 +42,10 @@ end
 function PlayerExtension:update(superFunc, dt)
     superFunc(self, dt)
     if MapObjectsHider.debug and self.debugInfo ~= nil then
-        DebugUtility.renderTable(0.1, 0.95, 0.01, self.debugInfo, 3, false)
+        DebugUtility.renderTable(0.05, 0.98, 0.009, self.debugInfo, 3, false)
     end
     if MapObjectsHider.debug and self.hideObjectDebugInfo ~= nil then
-        DebugUtility.renderTable(0.2, 0.95, 0.01, self.hideObjectDebugInfo, 3, false)
+        DebugUtility.renderTable(0.35, 0.98, 0.009, self.hideObjectDebugInfo, 3, false)
     end
 end
 
@@ -56,6 +56,9 @@ function PlayerExtension:updateTick(superFunc, dt)
     if self.isEntered and g_dedicatedServerInfo == nil then
         local x, y, z = localToWorld(self.cameraNode, 0, 0, 1.0)
         local dx, dy, dz = localDirectionToWorld(self.cameraNode, 0, 0, -1)
+        if self.raycastHideObject ~= nil then
+            self.lastRaycastHideObject = self.raycastHideObject
+        end
         self.raycastHideObject = nil
         self.debugInfo = nil
         self.hideObjectDebugInfo = nil
@@ -68,6 +71,11 @@ end
 function PlayerExtension:raycastCallback(hitObjectId)
     if hitObjectId ~= self.rootNode then
         if getHasClassId(hitObjectId, ClassIds.SHAPE) then
+            if hitObjectId == self.lastRaycastHitObject and not MapObjectsHider.debug then
+                self.raycastHideObject = self.lastRaycastHideObject
+                return false
+            end
+            local objectFound = false
             if MapObjectsHider.debug and self.debugInfo == nil then
                 -- debug first hitted object
                 self.debugInfo = MapObjectsHider:getObjectDebugInfo(hitObjectId)
@@ -80,7 +88,7 @@ function PlayerExtension:raycastCallback(hitObjectId)
                         -- debug placeable
                         self.hideObjectDebugInfo = {type = "Split Type", splitType = g_splitTypeManager:getSplitTypeByIndex(getSplitType(hitObjectId))}
                     end
-                    return false
+                    objectFound = true
                 elseif g_currentMission:getNodeObject(hitObjectId) == nil then
                     local object = {}
                     object.id, object.name = MapObjectsHider:getRealHideObject(hitObjectId)
@@ -90,7 +98,7 @@ function PlayerExtension:raycastCallback(hitObjectId)
                             -- debug hide object
                             self.hideObjectDebugInfo = MapObjectsHider:getObjectDebugInfo(object.id)
                         end
-                        return false
+                        objectFound = true
                     end
                 else
                     local object = g_currentMission:getNodeObject(hitObjectId)
@@ -102,10 +110,14 @@ function PlayerExtension:raycastCallback(hitObjectId)
                                 -- debug placeable
                                 self.hideObjectDebugInfo = {type = "Placeable", storeItem = storeItem}
                             end
-                            return false
+                            objectFound = true
                         end
                     end
                 end
+            end
+            if objectFound then
+                self.lastRaycastHitObject = hitObjectId
+                return false
             end
         end
     end
