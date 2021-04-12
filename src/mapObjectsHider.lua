@@ -36,7 +36,6 @@ function MapObjectsHider:initialize()
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
     Utility.overwrittenFunction(Player, "updateActionEvents", PlayerExtension.updateActionEvents)
 
-    Utility.prependedFunction()
 
     if Player.raycastCallback == nil then
         Player.raycastCallback = PlayerExtension.raycastCallback

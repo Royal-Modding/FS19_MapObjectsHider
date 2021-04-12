@@ -22,7 +22,7 @@
         <text name="moh_sell_confirm_enabled_tooltip"           text="Utilisation d'une confirmation lors de la vente" />
         <text name="moh_split_shapes_confirm_enabled"           text="Message de confirmation lors de la suppression d'arbres" />
         <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Utilisation d'une confirmation lors de la suppression d'arbres" />
-        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
-        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
+        <text name="moh_gui_show_help_enabled"                  text="Afficher l'aide de l'interface graphique" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Affichage ou non des boutons permettant d'ouvrir la liste des objets cachés dans le panneau d'aide." />
     </texts>
 </l10n>

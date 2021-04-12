@@ -2,12 +2,12 @@
 <l10n>
     <texts>
         <text name="input_MAP_OBJECT_HIDER_HIDE"                text="Ausblenden eines Kartenobjekts" />
-        <text name="input_MAP_OBJECT_HIDER_GUI"                 text="Open the Map Objects Hider panel" />
-        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text="Show hidden objects list" />
-        <text name="moh_gui_title"                              text="Hidden objects" />
-        <text name="moh_gui_loading_text"                       text="Loading hidden objects..." />
-        <text name="moh_gui_no_objects_text"                    text="No objects have been hidden until now" />
-        <text name="moh_gui_button_restore"                     text="Restore" />
+        <text name="input_MAP_OBJECT_HIDER_GUI"                 text="Öffnen Sie das Panel Map Objects Hider" />
+        <text name="moh_MAP_OBJECT_HIDER_GUI"                   text="Liste der versteckten Objekte anzeigen" />
+        <text name="moh_gui_title"                              text="Wimmelbilder" />
+        <text name="moh_gui_loading_text"                       text="Versteckte Objekte laden..." />
+        <text name="moh_gui_no_objects_text"                    text="Bisher wurden keine Objekte ausgeblendet" />
+        <text name="moh_gui_button_restore"                     text="Wiederherstellen" />
         <text name="moh_HIDE"                                   text="Ausblenden (%s)" />
         <text name="moh_SELL"                                   text="Verkaufen (%s)" />
         <text name="moh_DELETE"                                 text="Löschen (%s)" />
@@ -22,7 +22,7 @@
         <text name="moh_sell_confirm_enabled_tooltip"           text="Ob ein Bestätigungsdialog angezeigt werden soll, bevor ein Platzierungselement verkauft wird" />
         <text name="moh_split_shapes_confirm_enabled"           text="Bäume bestätigen Dialog" />
         <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Gibt an, ob ein Bestätigungsdialogfeld angezeigt werden soll, bevor Bäume und Protokolle entfernt werden" />
-        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
-        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
+        <text name="moh_gui_show_help_enabled"                  text="GUI-Hilfe anzeigen" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Ob die Schaltflächen zum Öffnen der Liste der ausgeblendeten Objekte im Hilfefenster angezeigt werden sollen" />
     </texts>
 </l10n>

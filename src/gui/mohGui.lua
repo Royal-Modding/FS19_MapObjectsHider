@@ -73,13 +73,15 @@ function MOHGui:loadCamera()
 end
 
 function MOHGui:resetCamera()
-    setWorldTranslation(self.cameraId, unpack(self.originCameraPos))
-    setRotation(self.cameraId, unpack(self.originCameraRot))
+    if self.cameraId ~= nil then
+        setWorldTranslation(self.cameraId, unpack(self.originCameraPos))
+        setRotation(self.cameraId, unpack(self.originCameraRot))
+    end
 end
 
 function MOHGui:sendCameraTo(objectId, zoom)
     local x, y, z = getWorldTranslation(objectId)
-    setWorldTranslation(self.cameraId, x, y + (4 * zoom), z - (4 * zoom))
+    setWorldTranslation(self.cameraId, x, y + (4 * zoom), z + (4 * zoom))
     setRotation(self.cameraId, math.rad(-40), 0, 0)
 end
 
@@ -196,4 +198,11 @@ function MOHGui:hideLastHiddenObject()
         self.materialsBackup = {}
         self.lastSelectedHiddenObject = nil
     end
+end
+
+function MOHGui:delete()
+    if self.cameraId ~= nil then
+        delete(self.cameraId)
+    end
+    MOHGui:superClass().delete(self)
 end

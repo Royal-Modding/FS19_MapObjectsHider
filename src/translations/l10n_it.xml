@@ -22,7 +22,7 @@
         <text name="moh_sell_confirm_enabled_tooltip"           text="Mostrare una conferma prima di vendere un posizionabile" />
         <text name="moh_split_shapes_confirm_enabled"           text="Messaggio di conferma Alberi e tronchi" />
         <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Mostrare una conferma prima di rimuovere alberi e tronchi" />
-        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
-        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
+        <text name="moh_gui_show_help_enabled"                  text="Mostra aiuto GUI" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Se mostrare i pulsanti per aprire la lista degli oggetti nascosti nel pannello di aiuto" />
     </texts>
 </l10n>

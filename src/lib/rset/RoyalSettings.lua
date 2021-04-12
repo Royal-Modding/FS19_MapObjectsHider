@@ -1,7 +1,7 @@
 --- Royal Settings
 
 ---@author Royal Modding
----@version 1.4.0.0
+---@version 1.4.1.0
 ---@date 12/01/2021
 
 ---@class RoyalSettings
@@ -34,6 +34,7 @@ RoyalSettings.OWNERS.USER = 2
 ---@param gameEnv any
 function RoyalSettings:initialize(gameEnv)
     g_logManager:devInfo("Initializing Royal Settings from %s", self.loadingModName)
+    gameEnv = gameEnv or getfenv(0)
 
     self.registrationEnabled = true
     self.guiDirectory = self.libDirectory .. "gui/"
