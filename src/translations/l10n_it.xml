@@ -16,13 +16,13 @@
         <text name="moh_delete_split_shape_dialog_text"         text="Sei sicuro di voler rimuovere questo albero/tronco?" />
         <text name="moh_dialog_title"                           text="Map Objects Hider" />
         <text name="moh_mod_settings_title"                     text="Map Objects Hider" />
-        <text name="moh_hide_confirm_enabled"                   text="Messaggio di conferma nascondi oggetti" />
-        <text name="moh_hide_confirm_enabled_tooltip"           text="Mostrare una conferma prima di nascondere un oggetto (altamente consigliato lasciarlo abilitato)" />
-        <text name="moh_sell_confirm_enabled"                   text="Messaggio di conferma posizionabili" />
-        <text name="moh_sell_confirm_enabled_tooltip"           text="Mostrare una conferma prima di vendere un posizionabile" />
-        <text name="moh_split_shapes_confirm_enabled"           text="Messaggio di conferma Alberi e tronchi" />
-        <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Mostrare una conferma prima di rimuovere alberi e tronchi" />
+        <text name="moh_hide_confirm_enabled"                   text="Conferma nascondi oggetti" />
+        <text name="moh_hide_confirm_enabled_tooltip"           text="Chiede una conferma prima di nascondere un oggetto (altamente consigliato lasciarlo abilitato)" />
+        <text name="moh_sell_confirm_enabled"                   text="Conferma vendita posizionabili" />
+        <text name="moh_sell_confirm_enabled_tooltip"           text="Chiede una conferma prima di vendere un posizionabile" />
+        <text name="moh_split_shapes_confirm_enabled"           text="Conferma Alberi e tronchi" />
+        <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Chiede una conferma prima di rimuovere alberi e tronchi" />
         <text name="moh_gui_show_help_enabled"                  text="Mostra aiuto GUI" />
-        <text name="moh_gui_show_help_enabled_tooltip"          text="Se mostrare i pulsanti per aprire la lista degli oggetti nascosti nel pannello di aiuto" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Mostra o nasconde nel pannello aiuto la scorciatoia per accedere alla lista degli oggetti nascosti" />
     </texts>
 </l10n>
