@@ -32,7 +32,7 @@ function ShowCollideNodeEvent:writeStream(streamId)
     streamWriteString(streamId, self.objectIndex)
     streamWriteBool(streamId, self.show)
     if not self.show then
-        streamWriteStream(streamId, self.rigidBodyType)
+        streamWriteString(streamId, self.rigidBodyType)
     end
 end
 

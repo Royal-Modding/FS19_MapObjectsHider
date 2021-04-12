@@ -38,6 +38,8 @@ function MOHGui:new(target)
     ---@type HiddenObject[]
     o.hiddenObjects = {}
 
+    o.startLoadingTime = 0
+
     return o
 end
 
@@ -49,6 +51,7 @@ function MOHGui:onCreate()
 end
 
 function MOHGui:onOpen()
+    self.mohList:deleteListItems()
     self:loadCamera()
     self.lastSelectedHiddenObject = nil
     self.materialsBackup = {}
@@ -56,12 +59,14 @@ function MOHGui:onOpen()
     self.mohLHOBox:setVisible(true)
     self.mohRestoreButton:setDisabled(true)
     self.hiddenObjects = {}
+    self.startLoadingTime = getTimeSec()
     RequestObjectsListEvent.sendToServer()
     MOHGui:superClass().onOpen(self)
 end
 
 function MOHGui:onClose()
     self:hideLastHiddenObject()
+    self.hiddenObjects = {}
     MOHGui:superClass().onClose(self)
 end
 
@@ -105,6 +110,8 @@ function MOHGui:onHiddenObjectsReceived(hiddenObjects)
         end
     )
 
+    g_logManager:devInfo("Loaded %d hidden objects in %.2f ms", #self.hiddenObjects, (getTimeSec() - self.startLoadingTime) * 1000)
+
     self:refreshList()
 end
 
@@ -133,13 +140,15 @@ end
 
 function MOHGui:onClickCancel()
     local eventUnused = MOHGui:superClass().onClickCancel(self)
-    if self.mohList:getSelectedElement() ~= nil then
+    local selectedElement, selectedIndex = self.mohList:getSelectedElement()
+    if selectedElement ~= nil then
         self:hideLastHiddenObject()
-        local selectedIndex = self.mohList:getSelectedElementIndex()
         local selectedHiddenObject = self.hiddenObjects[selectedIndex]
         ArrayUtility.removeAt(self.hiddenObjects, selectedIndex)
         ObjectShowRequestEvent.sendToServer(selectedHiddenObject.index)
-        self:refreshList()
+        self.mohList:removeElement(selectedElement)
+        self.mohList:updateItemPositions()
+        self.mohList:setSelectedIndex(selectedIndex, true)
         eventUnused = false
     end
     return eventUnused
