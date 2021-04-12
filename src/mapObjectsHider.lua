@@ -36,7 +36,6 @@ function MapObjectsHider:initialize()
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
     Utility.overwrittenFunction(Player, "updateActionEvents", PlayerExtension.updateActionEvents)
 
-
     if Player.raycastCallback == nil then
         Player.raycastCallback = PlayerExtension.raycastCallback
     end
@@ -484,6 +483,7 @@ function MapObjectsHider:getRealHideObject(objectId)
         return amo.mapObjectsHider.rootNode, getName(amo.mapObjectsHider.rootNode)
     end
 
+    -- try to intercept big sized objects with LOD such as houses
     if getName(getParent(objectId)) == "LOD0" then
         local rootNode = getParent(getParent(objectId))
         return rootNode, getName(rootNode)
@@ -491,6 +491,26 @@ function MapObjectsHider:getRealHideObject(objectId)
 
     local name = ""
     local id = nil
+
+    -- try to intercept medium sized objects such as electric cabins
+    local parent = getParent(objectId)
+    if getNumOfChildren(objectId) <= 8 then
+        EntityUtility.queryNodeHierarchy(
+            parent,
+            function(_, nodeName, depth)
+                if depth == 2 then
+                    if string.find(string.lower(nodeName), "decal", 1, true) then
+                        name = getName(parent)
+                        id = parent
+                    end
+                end
+            end
+        )
+        if id ~= nil then
+            return id, name
+        end
+    end
+
     EntityUtility.queryNodeParents(
         objectId,
         function(node, nodeName)
