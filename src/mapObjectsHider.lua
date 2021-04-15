@@ -95,7 +95,7 @@ function MapObjectsHider:onLoad()
         "hide_confirm_enabled",
         g_royalSettings.TYPES.GLOBAL,
         g_royalSettings.OWNERS.USER,
-        2,
+        1,
         {false, true},
         {"$l10n_ui_off", "$l10n_ui_on"},
         "$l10n_moh_hide_confirm_enabled",
