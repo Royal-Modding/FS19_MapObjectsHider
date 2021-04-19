@@ -22,7 +22,7 @@
         <text name="moh_sell_confirm_enabled_tooltip"           text="Показывать ли диалоговое окно подтверждения перед продажей размещаемых объектов." />
         <text name="moh_split_shapes_confirm_enabled"           text="Диалог для деревьев" />
         <text name="moh_split_shapes_confirm_enabled_tooltip"   text="Следует ли показывать диалоговое окно подтверждения перед удалением деревьев и колод." />
-        <text name="moh_gui_show_help_enabled"                  text="Show GUI help" />
-        <text name="moh_gui_show_help_enabled_tooltip"          text="Whether to show the buttons to open the hidden objects list in the help panel" />
+        <text name="moh_gui_show_help_enabled"                  text="Отображать подсказки GUI" />
+        <text name="moh_gui_show_help_enabled_tooltip"          text="Следует ли отображать сочетание клавиш, для открытия списка скрытых объектов в справочной панели." />
     </texts>
 </l10n>
