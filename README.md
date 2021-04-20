@@ -2,7 +2,7 @@
 
 Have you ever felt like you can't join two fields because of a rock that's right in the middle of them, or you can't build a shed because of some objects that take up space?
 These will no longer be problems thanks to "Map Objects Hider", this mod will let you permanently remove decorative objects and placeable items on your maps.  
-You can open the mod settings panel by pressing `RSHIFT + R`
+You can open the mod settings panel by pressing `RSHIFT + R`  
 You can restore objects by accessing the GUI with `LSHIFT + H`
 
 **Be careful :**
@@ -14,7 +14,7 @@ You can restore objects by accessing the GUI with `LSHIFT + H`
 ![iconfinder_flag-germany_748067](https://user-images.githubusercontent.com/7534621/114938948-08f06580-9e40-11eb-9bd9-cd9733f1c6bc.png)  
 Hatten Sie schon einmal das Gefühl, dass Sie zwei Felder nicht miteinander verbinden können, weil ein Felsen genau in der Mitte liegt, oder dass Sie einen Schuppen nicht bauen können, weil einige Objekte Platz wegnehmen?
 Mit "Map Objects Hider" ist das kein Problem mehr, denn mit diesem Mod können Sie dekorative Objekte und platzierbare Gegenstände auf Ihren Karten dauerhaft entfernen.  
-Sie können das Mod-Einstellungsfeld öffnen, indem Sie `RSHIFT + R` drücken
+Sie können das Mod-Einstellungsfeld öffnen, indem Sie `RSHIFT + R` drücken  
 Sie können Objekte wiederherstellen, indem Sie mit `LSHIFT + H` auf die entsprechende GUI zugreifen
 
 **Aber Vorsicht!**
@@ -26,7 +26,7 @@ Sie können Objekte wiederherstellen, indem Sie mit `LSHIFT + H` auf die entspre
 ![iconfinder_flag-france_748130](https://user-images.githubusercontent.com/7534621/114938931-02fa8480-9e40-11eb-84bb-b0c216000de9.png)  
 Avez-vous déjà eu l'impression que vous ne pouvez pas joindre deux champs à cause d'un rocher qui se trouve en plein milieu, ou que vous ne pouvez pas construire un hangar à cause de certains objets qui prennent de l'espace ?
 Ces problèmes ne se poseront plus grâce à "Map Objects Hider", ce mod vous permettra de supprimer définitivement les objets décoratifs et les objets pouvant être placés sur vos cartes.
-Vous pouvez ouvrir le panneau des paramètres du mod en appuyant sur `RSHIFT + R`
+Vous pouvez ouvrir le panneau des paramètres du mod en appuyant sur `RSHIFT + R`  
 Vous pouvez restaurer des objets en accédant à l'interface graphique appropriée avec `LSHIFT + H`
 
 **Faites attention :**
